@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { BrowserRouter as Router } from "react-router-dom"
+import { BrowserRouter as Router, Route } from "react-router-dom"
 import LoggedInRoutes from "./routes/loggedInRoutes"
 import LoggedOutRoutes from "./routes/loggedOutRoutes"
 
@@ -13,7 +13,19 @@ function App() {
         }
     }, [])
 
-    return <Router>{isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}</Router>
+    return (
+        <Router>
+            {isLoggedIn ? <LoggedInRoutes /> : <LoggedOutRoutes />}{" "}
+            <Route
+                path="*"
+                element={
+                    <main style={{ padding: "1rem" }}>
+                        <h2>Error 404</h2>
+                    </main>
+                }
+            />
+        </Router>
+    )
 }
 
 export default App
