@@ -21,7 +21,9 @@ function headerBar() {
     return (
         <div className={style.headerWrapper}>
             <div className={style.headerLogo}>
-                <img src={logo} alt="Logo" />
+                <Link to="/" style={{ textDecoration: "none" }}>
+                    <img src={logo} alt="Logo" />{" "}
+                </Link>
             </div>
             <div className={style.headerButton}>
                 <Link to={`/sign/${action}`} style={{ textDecoration: "none" }}>

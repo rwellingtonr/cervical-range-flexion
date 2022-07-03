@@ -6,14 +6,28 @@
     grid-template-columns: 1fr auto;
     grid-template-rows: 80px auto 50px;
     grid-template-areas: "header" "main" "footer";
-}
-.header {
-    grid-area: header;
-}
-.outlet {
-    grid-area: main;
-    background-color: lightblue;
-}
-.footer {
-    grid-area: footer;
+
+    .header {
+        grid-area: header;
+    }
+    .outlet {
+        grid-area: main;
+    }
+    .footer {
+        grid-area: footer;
+    }
+
+    .button {
+        background: rgba(143, 218, 200, 0.2);
+        text-decoration: none;
+        color: black;
+        border: 1px solid #8fdac8;
+        text-decoration: none;
+        width: 200px;
+        border-radius: 20px;
+
+        &:hover {
+            background-color: #8fdac8;
+        }
+    }
 }

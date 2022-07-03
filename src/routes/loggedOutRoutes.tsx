@@ -1,6 +1,7 @@
 import React from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import SignInButton from "../components/signIn/signInButton"
+import HomeIndex from "../pages/home/homeIndex"
 import HomeLoggedOut from "../pages/home/homeLoggedOut"
 
 function LoggedOutRoutes() {
@@ -8,14 +9,7 @@ function LoggedOutRoutes() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomeLoggedOut />}>
-                    <Route
-                        index
-                        element={
-                            <main style={{ padding: "1rem" }}>
-                                <p>Primeira tela</p>
-                            </main>
-                        }
-                    />
+                    <Route index element={<HomeIndex />} />
                     <Route path="sign" element={<div>frame lateral esquerdo</div>}>
                         <Route path=":action" element={<div>Sign in ou Sign up</div>} />
                     </Route>
