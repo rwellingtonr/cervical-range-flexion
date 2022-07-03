@@ -1,0 +1,34 @@
+.headerWrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+    height: 100%;
+
+    .headerLogo {
+        grid-column: 1;
+
+        img {
+            height: 80px;
+        }
+    }
+
+    .headerButton {
+        grid-column: 3;
+
+        .Button {
+            background: rgba(143, 218, 200, 0.2);
+            text-decoration: none;
+            color: black;
+            border: 1px solid #8fdac8;
+            text-decoration: none;
+            width: 200px;
+            border-radius: 20px;
+
+            &:hover {
+                background-color: #8fdac8;
+            }
+        }
+    }
+}
