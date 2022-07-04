@@ -5,18 +5,7 @@ import logo from "../../assets/logo.png"
 import { Link } from "react-router-dom"
 
 function headerBar() {
-    const [action, setAction] = useState<string>("register")
     const [state, setState] = useState<boolean>(true)
-
-    const handleSetAction = () => {
-        if (state) {
-            setState(false)
-            setAction("login")
-            return
-        }
-        setState(true)
-        setAction("register")
-    }
 
     return (
         <div className={style.headerWrapper}>
@@ -26,12 +15,15 @@ function headerBar() {
                 </Link>
             </div>
             <div className={style.headerButton}>
-                <Link to={`/sign/${action}`} style={{ textDecoration: "none" }}>
+                <Link
+                    to={`/sign/${state ? "register" : "login"}`}
+                    style={{ textDecoration: "none" }}
+                >
                     <Button
                         className={style.Button}
                         variant="contained"
                         size="large"
-                        onClick={() => handleSetAction()}
+                        onClick={() => setState(!state)}
                     >
                         {state ? "Registrar" : "Ascender"}
                     </Button>

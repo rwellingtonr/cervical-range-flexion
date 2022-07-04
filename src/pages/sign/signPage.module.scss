@@ -1,0 +1,13 @@
+.signWrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+    .spine {
+        margin-right: 200px;
+    }
+    .form {
+    }
+}

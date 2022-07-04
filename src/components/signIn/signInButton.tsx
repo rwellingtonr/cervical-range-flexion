@@ -3,7 +3,7 @@ import Button from "@mui/material/Button"
 import style from "./headerBar.module.scss"
 
 function SignInButton() {
-    return <></>
+    return <>bb</>
 }
 
 export default SignInButton

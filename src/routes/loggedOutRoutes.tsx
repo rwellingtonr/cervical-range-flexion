@@ -1,8 +1,9 @@
 import React from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import SignInButton from "../components/signIn/signInButton"
 import HomeIndex from "../pages/home/homeIndex"
 import HomeLoggedOut from "../pages/home/homeLoggedOut"
+import Sign from "../pages/sign/sign"
+import SignOption from "../pages/sign/signOption"
 
 function LoggedOutRoutes() {
     return (
@@ -10,8 +11,8 @@ function LoggedOutRoutes() {
             <Routes>
                 <Route path="/" element={<HomeLoggedOut />}>
                     <Route index element={<HomeIndex />} />
-                    <Route path="sign" element={<div>frame lateral esquerdo</div>}>
-                        <Route path=":action" element={<div>Sign in ou Sign up</div>} />
+                    <Route path="sign" element={<Sign />}>
+                        <Route path=":actions" element={<SignOption />} />
                     </Route>
                     <Route
                         path="*"
