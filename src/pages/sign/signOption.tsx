@@ -2,7 +2,7 @@ import React from "react"
 import { useParams } from "react-router-dom"
 import SignIn from "../../components/signIn/signIn"
 import SignUp from "../../components/signIn/signUp"
-
+import RetrievePassword from "../../components/signIn/retrievePassword"
 type FormsOptions = {
     login: JSX.Element
     register: JSX.Element
@@ -13,7 +13,7 @@ type actionOptions = "login" | "register" | "password"
 const formsOptions: FormsOptions = {
     login: <SignIn />,
     register: <SignUp />,
-    password: <div />,
+    password: <RetrievePassword />,
 }
 export default function SignOption() {
     const { actions } = useParams()

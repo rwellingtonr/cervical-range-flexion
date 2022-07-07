@@ -1,11 +1,10 @@
 import React, { useState } from "react"
+import { Link } from "react-router-dom"
 import Box from "@mui/material/Box"
 import InputTxt from "./inputTxt"
 import style from "./sign.module.scss"
 import InputPassword from "./inputPassword"
 import SignInButton from "./buttonModal/signInButton"
-
-type Props = {}
 
 export default function SignUp() {
     const [coffito, setCoffito] = useState<string>("")
@@ -41,7 +40,11 @@ export default function SignUp() {
                 <InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
 
                 <InputPassword setPassword={setPassword} password={password} />
-
+                <div>
+                    <Link to="/sign/password">
+                        <p>Esqueci minha senha</p>
+                    </Link>
+                </div>
                 <SignInButton message={"Registrar"} handleClick={handleRegister} />
             </Box>
         </div>
