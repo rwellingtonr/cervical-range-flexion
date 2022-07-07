@@ -1,0 +1,13 @@
+Button.button {
+    background: rgba(255, 251, 251, 0.99);
+    text-decoration: none;
+    color: black;
+    border: 1px solid rgba(255, 251, 251, 0.8);
+    text-decoration: none;
+    width: 200px;
+    border-radius: 20px;
+
+    &:hover {
+        background-color: rgba(255, 251, 251, 0.8);
+    }
+}

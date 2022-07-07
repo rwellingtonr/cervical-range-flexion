@@ -1,6 +1,5 @@
 import React from "react"
 import TextField from "@mui/material/TextField"
-import style from "./sign.module.scss"
 type Props = {
     label: string
     placeHolder: string
@@ -9,17 +8,17 @@ type Props = {
 
 export default function InputTxt({ label, placeHolder, fillIn }: Props) {
     return (
-        <>
+        <div>
             {" "}
             <TextField
                 required
+                sx={{ m: 1, borderRadius: "10px", background: "#ffff" }}
                 id="outlined-required"
                 label={label}
                 placeholder={placeHolder}
                 defaultValue=""
-                className={style.inputTxt}
                 onChange={e => fillIn(e.target.value)}
             />
-        </>
+        </div>
     )
 }
