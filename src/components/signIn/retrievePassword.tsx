@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import InputTxt from "./inputTxt"
 import style from "./sign.module.scss"
@@ -9,8 +9,20 @@ import SignInButton from "./buttonModal/signInButton"
 export default function RetrievePassword() {
     const [coffito, setCoffito] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+    const navigate = useNavigate()
 
-    const handleNewPassword = async () => {}
+    const handleNewPassword = async () => {
+        try {
+            navigate("/measurement", { replace: true })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLFormElement>) => {
+        if (event.key === "Enter") return await handleNewPassword()
+    }
+
     return (
         <div className={style.formWrapper}>
             <Box
@@ -25,6 +37,7 @@ export default function RetrievePassword() {
                 }}
                 noValidate
                 autoComplete="off"
+                onKeyPress={handleKeyPress}
             >
                 <div>
                     <h1>Nova Senha</h1>

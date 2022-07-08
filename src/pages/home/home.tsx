@@ -2,13 +2,13 @@ import React from "react"
 import { Outlet } from "react-router-dom"
 import Footer from "../../layout/footer"
 import style from "./home.module.scss"
-import HeaderBar from "../../components/signIn/headerBar"
+import HeaderBarHome from "../../components/headerBar/headerBarHome"
 
-export default function HomeLoggedOut() {
+export default function Home() {
     return (
         <div className={style.containerWrapper}>
             <div className={style.header}>
-                <HeaderBar />
+                <HeaderBarHome />
             </div>
             <main className={style.outlet}>
                 <Outlet />

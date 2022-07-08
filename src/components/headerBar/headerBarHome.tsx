@@ -4,7 +4,7 @@ import style from "./headerBar.module.scss"
 import logo from "../../assets/logo.png"
 import { Link } from "react-router-dom"
 
-function headerBar() {
+export default function headerBarHome() {
     const [state, setState] = useState<boolean>(true)
 
     return (
@@ -32,5 +32,3 @@ function headerBar() {
         </div>
     )
 }
-
-export default headerBar

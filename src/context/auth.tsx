@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from "react"
+import React, { createContext, ReactNode, useEffect, useState } from "react"
 import { api } from "../service/api"
 
 type AuthProvider = {
@@ -31,14 +31,21 @@ export const AuthContext = createContext({} as AuthContextValue)
 function AuthProvider({ children }: AuthProvider) {
     const [physiotherapist, setPhysiotherapist] = useState<Physiotherapist | null>(null)
 
+    useEffect(() => {
+        const token = localStorage.getItem("@tcc:token")
+        if (token) setToken(token)
+    }, [])
+
     const signIn = async (signIn: SignIn) => {
         const res = await api.post<LogIn>("signin", signIn)
         const { token, physiotherapist } = res.data
+        setToken(token)
+        setPhysiotherapist(physiotherapist)
+    }
 
+    const setToken = (token: string) => {
         localStorage.setItem("@tcc:token", token)
         api.defaults.headers.common.authorization = `Bearer ${token}`
-
-        setPhysiotherapist(physiotherapist)
     }
 
     const signOut = () => {
@@ -51,6 +58,10 @@ function AuthProvider({ children }: AuthProvider) {
             {children}
         </AuthContext.Provider>
     )
+}
+
+export const useAuth = () => {
+    return React.useContext(AuthContext)
 }
 
 export default AuthProvider

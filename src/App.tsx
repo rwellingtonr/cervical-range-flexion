@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react"
+import { BrowserRouter } from "react-router-dom"
+import MainRoutes from "./routes"
 
-import LoggedInRoutes from "./routes/loggedInRoutes"
-import LoggedOutRoutes from "./routes/loggedOutRoutes"
-
-function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-
-    useEffect(() => {
-        const token = localStorage.getItem("@tcc:token")
-        if (token) {
-            setIsLoggedIn(true)
-        }
-    }, [])
-
-    return <LoggedOutRoutes />
+export default function App() {
+    return (
+        <BrowserRouter>
+            {" "}
+            <MainRoutes />
+        </BrowserRouter>
+    )
 }
-
-export default App
