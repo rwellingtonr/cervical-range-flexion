@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import { useParams, useNavigate } from "react-router-dom"
 import { api } from "../../service/api"
+import DefaultButton from "../defaultButton.ts/defaultButton"
 import style from "./personInfo.module.scss"
 
 type PersonData = {
@@ -35,17 +37,24 @@ export default function PersonInfo() {
     }
 
     return !!person ? (
-        <main className={style.personWrapper}>
-            <h2 className={style.name}>{person?.name}</h2>
-            <div className={style.tableInLine}>
-                <p>Nascimento: </p>
-                <p>{formatDate(person?.birthday as string)}</p>
+        <>
+            <main className={style.personWrapper}>
+                <h2 className={style.name}>{person?.name}</h2>
+                <div className={style.tableInLine}>
+                    <p>Nascimento: </p>
+                    <p>{formatDate(person?.birthday as string)}</p>
+                </div>
+                <div className={style.tableInLine}>
+                    <p>Cirurgia: </p>
+                    <p>{formatDate(person?.surgery_date as string)}</p>
+                </div>
+            </main>
+            <div className={style.bottom}>
+                <Link to={"/charts"} style={{ textDecoration: "none" }}>
+                    <DefaultButton handleClick={console.log}> Prosseguir </DefaultButton>
+                </Link>
             </div>
-            <div className={style.tableInLine}>
-                <p>Cirurgia: </p>
-                <p>{formatDate(person?.surgery_date as string)}</p>
-            </div>
-        </main>
+        </>
     ) : (
         <></>
     )

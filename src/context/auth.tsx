@@ -33,7 +33,10 @@ function AuthProvider({ children }: AuthProvider) {
 
     useEffect(() => {
         const token = localStorage.getItem("@tcc:token")
-        if (token) setToken(token)
+        if (token) {
+            setToken(token)
+            setPhysiotherapist(prev => prev)
+        }
     }, [])
 
     const signIn = async (signIn: SignIn) => {

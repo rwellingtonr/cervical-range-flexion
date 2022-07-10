@@ -13,6 +13,9 @@
             height: 80px;
         }
     }
+    .headerMiddle {
+        grid-column: 2;
+    }
 
     .headerButton {
         grid-column: 3;

@@ -24,3 +24,12 @@
         width: inherit;
     }
 }
+
+.bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+
+    padding: 10px 0;
+    width: 400px;
+}

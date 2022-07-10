@@ -4,12 +4,12 @@ import HomeIndex from "../pages/home/homeIndex"
 import Home from "../pages/home/home"
 import Sign from "../pages/sign/sign"
 import SignOption from "../pages/sign/signOption"
-import Charts from "../pages/measurement/measurement"
 import PatientHistory from "../pages/patientHistory"
 import PatientRegistration from "../pages/patientRegistration"
 import RequireAuth from "../components/requireAuth"
 import Measurement from "../pages/measurement/measurement"
 import PersonInfo from "../components/personInfo/personInfo"
+import Charts from "../pages/charts/charts"
 
 export default function MainRoutes() {
     return (
