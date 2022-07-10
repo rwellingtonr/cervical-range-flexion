@@ -6,17 +6,25 @@ import style from "./sign.module.scss"
 import InputPassword from "./inputPassword"
 import SignInButton from "./buttonModal/signInButton"
 import { useNavigate } from "react-router-dom"
+import { api } from "../../service/api"
 
 export default function SignUp() {
     const [coffito, setCoffito] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+    const [userName, setUserName] = useState<string>("")
 
     const navigate = useNavigate()
 
     const handleRegister = async () => {
         try {
-            console.log("ok")
-            navigate("/measurement", { replace: true })
+            const userInfo = {
+                coffito,
+                password,
+                name: userName,
+            }
+
+            await api.post("/physiotherapist", userInfo)
+            navigate("/sign/login", { replace: true })
         } catch (error) {
             console.error(error)
         }
@@ -46,7 +54,7 @@ export default function SignUp() {
                 <InputTxt
                     label="Nome"
                     placeHolder="Informe seu nome completo"
-                    fillIn={setCoffito}
+                    fillIn={setUserName}
                 />
                 <InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
 
