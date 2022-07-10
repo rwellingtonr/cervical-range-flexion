@@ -4,6 +4,7 @@ import Stack from "@mui/material/Stack"
 import TextField from "@mui/material/TextField"
 import style from "./measurement.module.scss"
 import { api } from "../../service/api"
+import { Outlet, useNavigate } from "react-router-dom"
 
 type Patients = {
     id: string
@@ -16,7 +17,7 @@ type Patients = {
 
 export default function Measurement() {
     const [patients, setPatients] = useState<Patients[]>([])
-
+    const navigate = useNavigate()
     useEffect(() => {
         retrievePatients()
             .then(response => setPatients(response))
@@ -32,13 +33,20 @@ export default function Measurement() {
         options: patients,
         getOptionLabel: (option: Patients) => option.name,
     }
+
+    const handleSelect = (name: string) => {
+        const person = patients.find(patient => patient.name === name)
+        navigate(`/measurement/${person?.id}`)
+    }
+
     return (
-        <div className={style.measurementWrapper}>
+        <main className={style.measurementWrapper}>
             <Stack spacing={1} className={style.stack} sx={{ width: 450 }}>
                 <Autocomplete
                     {...defaultProps}
                     id="auto-highlight"
                     autoHighlight
+                    onInputChange={(event, newInputValue) => handleSelect(newInputValue)}
                     renderInput={params => (
                         <TextField
                             {...params}
@@ -51,6 +59,7 @@ export default function Measurement() {
                     )}
                 />
             </Stack>
-        </div>
+            <Outlet />
+        </main>
     )
 }

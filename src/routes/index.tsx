@@ -9,6 +9,7 @@ import PatientHistory from "../pages/patientHistory"
 import PatientRegistration from "../pages/patientRegistration"
 import RequireAuth from "../components/requireAuth"
 import Measurement from "../pages/measurement/measurement"
+import PersonInfo from "../components/personInfo/personInfo"
 
 export default function MainRoutes() {
     return (
@@ -26,32 +27,33 @@ export default function MainRoutes() {
                         </RequireAuth>
                     }
                 >
-                    <Route
-                        path="charts"
-                        element={
-                            <RequireAuth>
-                                <Charts />
-                            </RequireAuth>
-                        }
-                    />
-
-                    <Route
-                        path="patientHistory"
-                        element={
-                            <RequireAuth>
-                                <PatientHistory />
-                            </RequireAuth>
-                        }
-                    />
-                    <Route
-                        path="patientRegistration"
-                        element={
-                            <RequireAuth>
-                                <PatientRegistration />
-                            </RequireAuth>
-                        }
-                    />
+                    <Route path=":personId" element={<PersonInfo />} />
                 </Route>
+                <Route
+                    path="charts"
+                    element={
+                        <RequireAuth>
+                            <Charts />
+                        </RequireAuth>
+                    }
+                />
+
+                <Route
+                    path="patientHistory"
+                    element={
+                        <RequireAuth>
+                            <PatientHistory />
+                        </RequireAuth>
+                    }
+                />
+                <Route
+                    path="patientRegistration"
+                    element={
+                        <RequireAuth>
+                            <PatientRegistration />
+                        </RequireAuth>
+                    }
+                />
                 <Route
                     path="*"
                     element={
