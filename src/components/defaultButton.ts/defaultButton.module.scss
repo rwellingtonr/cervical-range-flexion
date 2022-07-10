@@ -1,0 +1,13 @@
+Button.Button {
+    background: rgba(143, 218, 200, 0.2);
+    text-decoration: none;
+    color: black;
+    border: 1px solid #8fdac8;
+    text-decoration: none;
+    width: 200px;
+    border-radius: 20px;
+
+    &:hover {
+        background-color: #8fdac8;
+    }
+}

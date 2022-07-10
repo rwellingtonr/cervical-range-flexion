@@ -34,7 +34,7 @@ export default function PersonInfo() {
         return new Date(date).toLocaleDateString()
     }
 
-    return (
+    return !!person ? (
         <main className={style.personWrapper}>
             <h2 className={style.name}>{person?.name}</h2>
             <div className={style.tableInLine}>
@@ -46,5 +46,7 @@ export default function PersonInfo() {
                 <p>{formatDate(person?.surgery_date as string)}</p>
             </div>
         </main>
+    ) : (
+        <></>
     )
 }

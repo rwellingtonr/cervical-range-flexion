@@ -3,12 +3,15 @@ import Button from "@mui/material/Button"
 import style from "./headerBar.module.scss"
 import logo from "../../assets/logo.png"
 import { Link } from "react-router-dom"
+import DefaultButton from "../defaultButton.ts/defaultButton"
 
 export default function headerBarHome() {
     const [state, setState] = useState<boolean>(true)
 
+    const switchState = () => setState(!state)
+
     return (
-        <div className={style.headerWrapper}>
+        <header className={style.headerWrapper}>
             <div className={style.headerLogo}>
                 <Link to="/" style={{ textDecoration: "none" }}>
                     <img src={logo} alt="Logo" />{" "}
@@ -19,16 +22,19 @@ export default function headerBarHome() {
                     to={`/sign/${state ? "register" : "login"}`}
                     style={{ textDecoration: "none" }}
                 >
-                    <Button
+                    {/* <Button
                         className={style.Button}
                         variant="contained"
                         size="large"
                         onClick={() => setState(!state)}
                     >
                         {state ? "Registrar" : "Ascender"}
-                    </Button>
+                    </Button> */}
+                    <DefaultButton handleClick={switchState}>
+                        {state ? "Registrar" : "Ascender"}
+                    </DefaultButton>
                 </Link>
             </div>
-        </div>
+        </header>
     )
 }
