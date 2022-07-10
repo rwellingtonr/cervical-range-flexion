@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { api } from "../../service/api"
 import style from "./personInfo.module.scss"
 
@@ -19,12 +19,16 @@ const getPerson = async (personId: string) => {
 export default function PersonInfo() {
     const [person, setPerson] = useState<PersonData>()
     const { personId } = useParams()
+    const navigate = useNavigate()
 
     useMemo(() => {
         getPerson(personId as string)
             .then(data => setPerson(data))
-            .catch(e => console.error(e))
-    }, [])
+            .catch(e => {
+                console.error(e)
+                navigate("/measurement")
+            })
+    }, [personId])
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString()
