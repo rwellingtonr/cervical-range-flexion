@@ -6,6 +6,12 @@ import Box from "@mui/material/Box"
 import { Person, Analytics, AdUnits } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 
+enum TabsBar {
+    "patientRegistration",
+    "measurement",
+    "patientHistory",
+}
+
 function a11yProps(index: any) {
     return {
         id: `action-tab-${index}`,
@@ -19,6 +25,7 @@ export default function FloatingActionButtonZoom() {
 
     const handleChange = (event: unknown, newValue: number) => {
         setValue(newValue)
+        navigate(`/${TabsBar[newValue]}`)
     }
 
     const patient = () => {
