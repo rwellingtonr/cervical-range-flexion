@@ -7,14 +7,11 @@ import HeaderBarLogged from "../../components/headerBar/headerBarLogged"
 import { useAuth } from "../../context/auth"
 
 export default function Home() {
-    const token = localStorage.getItem("@tcc:token")
-    const { physiotherapist } = useAuth()
+    const { token } = useAuth()
 
     return (
         <div className={style.containerWrapper}>
-            <div className={style.header}>
-                {!!physiotherapist ? <HeaderBarLogged /> : <HeaderBarHome />}
-            </div>
+            <div className={style.header}>{!!token ? <HeaderBarLogged /> : <HeaderBarHome />}</div>
             <main className={style.outlet}>
                 <Outlet />
             </main>
