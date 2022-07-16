@@ -1,10 +1,9 @@
 import React, { useState } from "react"
 import ProgressCircle from "../../components/circularProgress"
 import DefaultButton from "../../components/defaultButton.ts/defaultButton"
-import { useSocket } from "../../context/socket"
+import { socket } from "../../service/websocket"
 
 export default function Charts() {
-    const { socket } = useSocket()
     const [isTaring, setIsTaring] = useState<boolean>(false)
 
     const handleCalibrate = () => {
