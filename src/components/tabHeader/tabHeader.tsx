@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import AppBar from "@mui/material/AppBar"
 import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
@@ -20,8 +20,20 @@ function a11yProps(index: any) {
 }
 
 export default function FloatingActionButtonZoom() {
-    const [value, setValue] = React.useState(1)
+    const [value, setValue] = useState<number>(1)
     const navigate = useNavigate()
+    const isFirstRender = useRef<boolean>(true)
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            const url = window.location.href
+            const currentTab = url.slice(url.lastIndexOf("/") + 1)
+            setValue(TabsBar[currentTab])
+            return
+        }
+        isFirstRender.current = false
+        return
+    }, [])
 
     const handleChange = (event: unknown, newValue: number) => {
         setValue(newValue)
