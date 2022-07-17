@@ -9,7 +9,13 @@ type DfButton = {
 
 export default function DefaultButton({ children, handleClick }: DfButton) {
     return (
-        <Button className={style.Button} variant="contained" size="large" onClick={handleClick}>
+        <Button
+            type="submit"
+            className={style.Button}
+            variant="contained"
+            size="large"
+            onClick={handleClick}
+        >
             {children}
         </Button>
     )
