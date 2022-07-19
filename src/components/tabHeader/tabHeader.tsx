@@ -7,9 +7,9 @@ import { Person, Analytics, AdUnits } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 
 enum TabsBar {
-    "patientRegistration",
-    "measurement",
-    "patientHistory",
+    patientRegistration,
+    measurement,
+    patientHistory,
 }
 
 function a11yProps(index: any) {
@@ -28,7 +28,7 @@ export default function FloatingActionButtonZoom() {
         if (isFirstRender.current) {
             const url = window.location.href
             const currentTab = url.slice(url.lastIndexOf("/") + 1)
-            setValue(TabsBar[currentTab])
+            setValue(TabsBar[currentTab] ?? 1)
             return
         }
         isFirstRender.current = false
