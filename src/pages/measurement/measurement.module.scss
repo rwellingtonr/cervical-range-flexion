@@ -2,8 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 100px;
-    padding: 20px;
+    margin: 50px;
 
     .stack {
         background: rgba(143, 218, 200, 0.2);
@@ -12,5 +11,8 @@
         &:hover {
             background-color: #8fdac8;
         }
+    }
+    .register {
+        padding-bottom: 30px;
     }
 }
