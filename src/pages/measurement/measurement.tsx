@@ -47,6 +47,9 @@ export default function Measurement() {
 
     return (
         <main className={style.measurementWrapper}>
+            <div className={style.register}>
+                <h1>Avaliação</h1>
+            </div>
             <Stack spacing={1} className={style.stack} sx={{ width: 450 }}>
                 <Autocomplete
                     {...defaultProps}
