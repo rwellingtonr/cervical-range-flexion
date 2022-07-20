@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField"
 import style from "./measurement.module.scss"
 import { api } from "../../service/api"
 import { Outlet, useNavigate } from "react-router-dom"
+import { useAuth } from "../../context/auth"
 
 type Patients = {
     id: string
@@ -19,6 +20,7 @@ export default function Measurement() {
     const isFirstRender = useRef<boolean>(true)
     const [patients, setPatients] = useState<Patients[]>([])
     const navigate = useNavigate()
+    const { signOut } = useAuth()
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -27,7 +29,13 @@ export default function Measurement() {
         }
         retrievePatients()
             .then(response => setPatients(response))
-            .catch(e => console.error(e))
+            .catch(e => {
+                if (e.response.status === 401) {
+                    signOut()
+                    navigate("/", { replace: true })
+                }
+                console.error(e)
+            })
     }, [])
 
     const retrievePatients = async () => {

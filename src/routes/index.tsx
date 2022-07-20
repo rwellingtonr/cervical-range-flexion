@@ -10,6 +10,8 @@ import RequireAuth from "../components/requireAuth"
 import Measurement from "../pages/measurement/measurement"
 import PersonInfo from "../components/personInfo/personInfo"
 import Charts from "../pages/charts/charts"
+import HistorySelect from "../components/history/historySelect"
+import AreaHistoryChart from "../components/charts/areaHistoryChart"
 
 export default function MainRoutes() {
     return (
@@ -45,7 +47,10 @@ export default function MainRoutes() {
                             <PatientHistory />
                         </RequireAuth>
                     }
-                />
+                >
+                    <Route index element={<HistorySelect />} />
+                    <Route path=":id" element={<AreaHistoryChart />} />
+                </Route>
                 <Route
                     path="patientRegistration"
                     element={

@@ -28,7 +28,7 @@ export default function FloatingActionButtonZoom() {
         if (isFirstRender.current) {
             const url = window.location.href
             const currentTab = url.slice(url.lastIndexOf("/") + 1)
-            setValue(TabsBar[currentTab] ?? 1)
+            setValue(TabsBar[currentTab])
             return
         }
         isFirstRender.current = false

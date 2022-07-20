@@ -12,8 +12,8 @@ type Patient = {
     cpf: string
     name: string
     gender: string
-    surgery_date: string
-    birthday: string
+    surgery_date: Date
+    birthday: Date
 }
 type FeedBack = {
     severity: "error" | "info" | "success" | "warning"
@@ -33,8 +33,8 @@ function PatientRegistration() {
     const [name, setName] = useState("")
     const [cpf, setCpf] = useState("")
     const [gender, setGender] = useState("")
-    const [surgeryDate, setSurgeryDate] = useState("")
-    const [birthday, setBirthday] = useState("")
+    const [surgeryDate, setSurgeryDate] = useState<Date>(new Date())
+    const [birthday, setBirthday] = useState<Date>(new Date())
     const [feedback, setFeedBack] = useState<FeedBack>({
         open: false,
         message: "",
@@ -78,12 +78,13 @@ function PatientRegistration() {
         setName("")
         setCpf("")
         setGender("")
-        setSurgeryDate("")
-        setBirthday("")
+        setSurgeryDate(new Date())
+        setBirthday(new Date())
     }
 
     const handleSetDate = (type: string, date: string) => {
-        const dateIso = new Date(date).toISOString()
+        const time = new Date().toLocaleTimeString()
+        const dateIso = new Date(`${date}:${time}`)
         if (type === "birthday") {
             setBirthday(dateIso)
             return
