@@ -85,6 +85,13 @@ export default function FloatingActionButtonZoom() {
                         "& .Mui-focusVisible": {
                             color: "#8fdac8",
                         },
+                        "& .Mui-selected": {
+                            background: "rgba(143, 218, 200, 0.2)",
+                            color: "#08542c",
+                        },
+                        "& .css-1aquho2-MuiTabs-indicator": {
+                            background: "#8fdac8",
+                        },
                     }}
                 >
                     <Tab label={patient()} {...a11yProps(0)} />
