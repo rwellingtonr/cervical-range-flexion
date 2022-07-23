@@ -3,7 +3,7 @@ import Button from "@mui/material/Button"
 import style from "./defaultButton.module.scss"
 
 type DfButton = {
-    handleClick: () => void
+    handleClick?: () => void
     children: ReactNode
 }
 

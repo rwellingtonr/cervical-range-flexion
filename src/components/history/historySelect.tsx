@@ -31,10 +31,7 @@ export default function HistorySelect() {
     const isFirstRender = useRef<boolean>(true)
     const [patients, setPatientIds] = useState<Patients[]>([])
     const [patientId, setPatientId] = useState("")
-    const [dates, setDates] = useState<Dates>({
-        initialDate: new Date(),
-        endDate: new Date(),
-    })
+    const [dates, setDates] = useState({} as Dates)
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false
@@ -62,13 +59,15 @@ export default function HistorySelect() {
     }
 
     const handleSetDate = (type: string, date: string) => {
-        const time = new Date().toLocaleTimeString()
-        const dateIso = new Date(`${date}:${time}`)
-        if (type === "Initial") {
-            setDates({ ...dates, initialDate: dateIso })
-            return
+        if (date) {
+            const time = new Date().toLocaleTimeString()
+            const dateIso = new Date(`${date}:${time}`)
+            if (type === "Initial") {
+                setDates({ ...dates, initialDate: dateIso })
+                return
+            }
+            setDates({ ...dates, endDate: dateIso })
         }
-        setDates({ ...dates, endDate: dateIso })
     }
     const handleSelect = (name: string) => {
         const person = patients.find(patient => patient.name === name)
@@ -117,7 +116,7 @@ export default function HistorySelect() {
                         style={{ textDecoration: "none" }}
                         to={`/patientHistory/${patientId}?startDate=${dates.initialDate}&endDate=${dates.endDate}`}
                     >
-                        <DefaultButton handleClick={console.log}>
+                        <DefaultButton>
                             <Person style={{ paddingRight: "10px" }} />
                             Selecionar
                         </DefaultButton>

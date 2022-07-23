@@ -20,23 +20,23 @@ export default function AreaHistoryChart() {
     const isFirstRender = useRef<boolean>(true)
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false
-            return
-        }
+        // if (isFirstRender.current) {
+        //     isFirstRender.current = false
+        //     return
+        // }
         retrieveData()
             .then(content => {
-                console.log(content)
+                console.log("oi")
                 setData(content)
             })
             .catch(e => console.error(e))
-    }, [id])
+    }, [id, startDate, endDate])
 
     const retrieveData = async () => {
         const res = await api.get<MeasureHistory[]>(`/history/${id}`, {
             params: {
-                firstDate: new Date(startDate as string).toISOString(),
-                lastDate: new Date(endDate as string).toISOString(),
+                firstDate: !startDate ? new Date(startDate as string).toISOString() : "",
+                lastDate: !endDate ? new Date(endDate as string).toISOString() : "",
             },
         })
 

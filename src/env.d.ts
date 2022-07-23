@@ -1,5 +1,6 @@
 interface ImportMetaEnv {
     readonly VITE_BACK_END: string
+    readonly PORT: string
     // more env variables...
 }
 

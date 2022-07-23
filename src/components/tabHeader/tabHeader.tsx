@@ -12,6 +12,8 @@ enum TabsBar {
     patientHistory,
 }
 
+type Tabs = "patientRegistration" | "measurement" | "patientHistory"
+
 function a11yProps(index: any) {
     return {
         id: `action-tab-${index}`,
@@ -25,14 +27,10 @@ export default function FloatingActionButtonZoom() {
     const isFirstRender = useRef<boolean>(true)
 
     useEffect(() => {
-        if (isFirstRender.current) {
-            const url = window.location.href
-            const currentTab = url.slice(url.lastIndexOf("/") + 1)
-            setValue(TabsBar[currentTab])
-            return
-        }
-        isFirstRender.current = false
-        return
+        const url = window.location.href
+        const currentTab = url.split("/")[3] as Tabs
+        if (!currentTab) return
+        setValue(TabsBar[currentTab])
     }, [])
 
     const handleChange = (event: unknown, newValue: number) => {
