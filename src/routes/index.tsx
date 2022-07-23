@@ -11,7 +11,7 @@ import Measurement from "../pages/measurement/measurement"
 import PersonInfo from "../components/personInfo/personInfo"
 import Charts from "../pages/charts/charts"
 import HistorySelect from "../components/history/historySelect"
-import AreaHistoryChart from "../components/charts/areaHistoryChart"
+import HistoryChart from "../components/history/historyChart"
 
 export default function MainRoutes() {
     return (
@@ -49,7 +49,7 @@ export default function MainRoutes() {
                     }
                 >
                     <Route index element={<HistorySelect />} />
-                    <Route path=":id" element={<AreaHistoryChart />} />
+                    <Route path=":id" element={<HistoryChart />} />
                 </Route>
                 <Route
                     path="patientRegistration"
