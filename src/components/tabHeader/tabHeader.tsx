@@ -85,7 +85,7 @@ export default function FloatingActionButtonZoom() {
                         "& .Mui-focusVisible": {
                             color: "#8fdac8",
                         },
-                        "& .Mui-selected": {
+                        "& .css-1ujykiq-MuiButtonBase-root-MuiTab-root.Mui-selected": {
                             background: "rgba(143, 218, 200, 0.2)",
                             color: "#08542c",
                         },
