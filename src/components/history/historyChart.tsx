@@ -6,6 +6,7 @@ import Box from "@mui/material/Box"
 import style from "./historyChart.module.scss"
 import DefaultButton from "../defaultButton.ts/defaultButton"
 import { Link } from "react-router-dom"
+import { capitalize } from "../../utils/format"
 
 type MeasureHistory = {
     id: string
@@ -14,13 +15,21 @@ type MeasureHistory = {
     patient_id: string
     physio_coffito: string
 }
-
+type Patient = {
+    id: string
+    name: string
+    cpf: string
+    gender: string
+    birthday: Date
+    surgery_date: Date
+}
 export default function HistoryChart() {
     const { id } = useParams<"id">()
     const [searchParams] = useSearchParams()
     const startDate = searchParams.get("startDate")
     const endDate = searchParams.get("endDate")
     const [data, setData] = useState<MeasureHistory[]>([])
+    const [userName, setUserName] = useState<string>("")
     const isFirstRender = useRef<boolean>(true)
 
     useEffect(() => {
@@ -30,6 +39,10 @@ export default function HistoryChart() {
         }
         retrieveData()
             .then(content => setData(content))
+            .catch(e => console.error(e))
+
+        retrieveUser()
+            .then(content => setUserName(capitalize(content.name)))
             .catch(e => console.error(e))
     }, [id, startDate, endDate])
 
@@ -44,12 +57,18 @@ export default function HistoryChart() {
         return res.data
     }
 
+    const retrieveUser = async () => {
+        const res = await api.get<Patient>(`/patient/${id}`)
+        return res.data
+    }
+
     const period = () => {
         if (data.length) {
             const firstDate = new Date(data[0].measurement_date).getTime()
             const lastDate = new Date(data.at(-1)?.measurement_date as Date).getTime()
             const diff = Math.abs(firstDate - lastDate)
-            return Math.ceil(diff / (1000 * 60 * 60 * 24))
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+            return `${days} dias`
         }
     }
 
@@ -68,10 +87,10 @@ export default function HistoryChart() {
             <AreaDisplayChart dataValues={data} xAxis={"measurement_date"} areaValue={"score"} />
             <Box className={style.boxWrapper}>
                 <div className={style.displayInfo}>
-                    <h2 className={style.tableHeader}>Wellington</h2>
+                    <h2 className={style.tableHeader}>{userName}</h2>
                     <div className={style.tableWrapper}>
                         <h4>Período: </h4>
-                        <p>{period()} dias</p>
+                        <p>{period()}</p>
                     </div>
                     <div className={style.tableWrapper}>
                         <h4>Diferença %:</h4>
