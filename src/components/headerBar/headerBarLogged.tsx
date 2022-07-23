@@ -14,9 +14,8 @@ export default function HeaderBarLogged() {
         <header className={style.headerWrapper}>
             <div className={style.headerLogo}>
                 <Link to="/measurement" style={{ textDecoration: "none" }}>
-                    <img src={logo} alt="Logo" />{" "}
+                    <img src={logo} alt="Logo" /> <img src={spine} alt="Espinha Cervical" />
                 </Link>
-                <img src={spine} alt="Espinha Cervical" />
             </div>
             <div className={style.headerMiddle}>
                 <FloatingActionButtonZoom />
