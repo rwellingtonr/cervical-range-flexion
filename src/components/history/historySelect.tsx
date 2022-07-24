@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import DefaultButton from "../../components/defaultButton.ts/defaultButton"
 import Person from "@mui/icons-material/Person"
@@ -13,8 +13,10 @@ type Dates = {
 }
 
 export default function HistorySelect() {
-	const { patient } = usePatient()
+	const { patient, setPatient } = usePatient()
 	const [dates, setDates] = useState({} as Dates)
+
+	useEffect(() => setPatient(null), [])
 
 	const handleSetDate = (type: string, date: string) => {
 		if (date) {
