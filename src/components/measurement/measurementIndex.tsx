@@ -11,7 +11,7 @@ export default function MeasurementIndex() {
 	return (
 		<>
 			<SelectPatient />
-			{patient && <PersonInfo patient={patient} />}
+			{patient && <PersonInfo />}
 		</>
 	)
 }

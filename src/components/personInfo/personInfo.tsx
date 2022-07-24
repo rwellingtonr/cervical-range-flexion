@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import { usePatient } from "../../context/patient"
 import DefaultButton from "../defaultButton.ts/defaultButton"
 import style from "./personInfo.module.scss"
 
@@ -12,11 +13,8 @@ type Patient = {
 	surgery_date: Date
 }
 
-type PersonInfo = {
-	patient: Patient
-}
-
-export default function PersonInfo({ patient }: PersonInfo) {
+export default function PersonInfo() {
+	const { patient } = usePatient()
 	const formatDate = (date: Date) => {
 		return new Date(date).toLocaleDateString("pt-BR")
 	}
@@ -27,15 +25,15 @@ export default function PersonInfo({ patient }: PersonInfo) {
 				<h2 className={style.name}>{patient?.name}</h2>
 				<div className={style.tableInLine}>
 					<p>Nascimento: </p>
-					<p>{formatDate(patient?.birthday)}</p>
+					<p>{formatDate(patient?.birthday as Date)}</p>
 				</div>
 				<div className={style.tableInLine}>
 					<p>Cirurgia: </p>
-					<p>{formatDate(patient?.surgery_date)}</p>
+					<p>{formatDate(patient?.surgery_date as Date)}</p>
 				</div>
 			</main>
 			<div className={style.bottom}>
-				<Link to={"/charts"} style={{ textDecoration: "none" }}>
+				<Link to={"/measurement/realtime"} style={{ textDecoration: "none" }}>
 					<DefaultButton> Prosseguir </DefaultButton>
 				</Link>
 			</div>

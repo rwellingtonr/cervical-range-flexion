@@ -8,7 +8,7 @@ import PatientHistory from "../pages/patientHistory/patientHistory"
 import PatientRegistration from "../pages/patientRegistration/patientRegistration"
 import RequireAuth from "../components/requireAuth"
 import Measurement from "../pages/measurement/measurement"
-import RealTime from "../pages/charts/realTime"
+import RealTime from "../components/realTime/realTime"
 import HistorySelect from "../components/history/historySelect"
 import HistoryChart from "../components/history/historyChart"
 import MeasurementIndex from "../components/measurement/measurementIndex"
@@ -30,7 +30,7 @@ export default function MainRoutes() {
 					}
 				>
 					<Route index element={<MeasurementIndex />} />
-					<Route path=":personId" element={<RealTime />} />
+					<Route path="realtime" element={<RealTime />} />
 				</Route>
 
 				<Route
