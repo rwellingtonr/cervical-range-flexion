@@ -40,9 +40,7 @@ function AuthProvider({ children }: AuthProvider) {
 
 	useEffect(() => {
 		const code = localStorage.getItem("@tcc:token")
-		if (code) {
-			setBearer(code)
-		}
+		if (code) setBearer(code)
 	}, [])
 
 	const setBearer = (token: string) => {
