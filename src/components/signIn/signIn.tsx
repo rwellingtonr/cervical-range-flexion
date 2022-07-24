@@ -9,56 +9,56 @@ import SignInButton from "./buttonModal/signInButton"
 import { useNavigate } from "react-router-dom"
 
 export default function SignIn() {
-    const { signIn } = useAuth()
-    const navigate = useNavigate()
-    const [coffito, setCoffito] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
+	const { signIn } = useAuth()
+	const navigate = useNavigate()
+	const [coffito, setCoffito] = useState<string>("")
+	const [password, setPassword] = useState<string>("")
 
-    const handleSignIn = async () => {
-        try {
-            await signIn({ coffito, password })
-            navigate("/measurement", { replace: true })
-        } catch (error) {
-            console.log("Error ao tentar fazer o logIn", error)
-        }
-        setCoffito("")
-        setPassword("")
-    }
-    const handleKeyPress = async (event: React.KeyboardEvent<HTMLFormElement>) => {
-        if (event.key === "Enter") return await handleSignIn()
-    }
+	const handleSignIn = async () => {
+		try {
+			await signIn({ coffito, password })
+			navigate("/measurement", { replace: true })
+		} catch (error) {
+			console.log("Error ao tentar fazer o logIn", error)
+		}
+		setCoffito("")
+		setPassword("")
+	}
+	const handleKeyPress = async (event: React.KeyboardEvent<HTMLFormElement>) => {
+		if (event.key === "Enter") return await handleSignIn()
+	}
 
-    return (
-        <div className={style.formWrapper}>
-            <Box
-                component="form"
-                className={style.form}
-                sx={{
-                    "& .MuiTextField-root": {
-                        m: 0,
-                        width: "350px",
-                        maxWidth: "100%",
-                    },
-                }}
-                noValidate
-                autoComplete="off"
-                onKeyPress={handleKeyPress}
-            >
-                <div>
-                    <h1>Começar</h1>
-                </div>
+	return (
+		<div className={style.formWrapper}>
+			<Box
+				component="form"
+				className={style.form}
+				sx={{
+					"& .MuiTextField-root": {
+						m: 0,
+						width: "350px",
+						maxWidth: "100%",
+					},
+				}}
+				noValidate
+				autoComplete="off"
+				onKeyPress={handleKeyPress}
+			>
+				<div>
+					<h1>Começar</h1>
+				</div>
 
-                <InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
+				<InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
 
-                <InputPassword setPassword={setPassword} password={password} />
-                <div>
-                    <Link to="/sign/password">
-                        <p>Esqueci minha senha</p>
-                    </Link>
-                </div>
+				<InputPassword setPassword={setPassword} password={password} />
+				<div>
+					<Link to="/sign/password">
+						<p>Esqueci minha senha</p>
+					</Link>
+				</div>
 
-                <SignInButton message={"Conectar"} handleClick={handleSignIn} />
-            </Box>
-        </div>
-    )
+				<SignInButton message={"Conectar"} handleClick={handleSignIn} />
+			</Box>
+		</div>
+	)
 }

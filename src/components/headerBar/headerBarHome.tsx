@@ -5,27 +5,27 @@ import { Link } from "react-router-dom"
 import DefaultButton from "../defaultButton.ts/defaultButton"
 
 export default function headerBarHome() {
-    const [state, setState] = useState<boolean>(true)
+	const [state, setState] = useState<boolean>(true)
 
-    const switchState = () => setState(!state)
+	const switchState = () => setState(!state)
 
-    return (
-        <header className={style.headerWrapper}>
-            <div className={style.headerLogo}>
-                <Link to="/" style={{ textDecoration: "none" }}>
-                    <img src={logo} alt="Logo" />{" "}
-                </Link>
-            </div>
-            <div className={style.headerButton}>
-                <Link
-                    to={`/sign/${state ? "register" : "login"}`}
-                    style={{ textDecoration: "none" }}
-                >
-                    <DefaultButton handleClick={switchState}>
-                        {state ? "Registrar" : "Ascender"}
-                    </DefaultButton>
-                </Link>
-            </div>
-        </header>
-    )
+	return (
+		<header className={style.headerWrapper}>
+			<div className={style.headerLogo}>
+				<Link to="/" style={{ textDecoration: "none" }}>
+					<img src={logo} alt="Logo" />{" "}
+				</Link>
+			</div>
+			<div className={style.headerButton}>
+				<Link
+					to={`/sign/${state ? "register" : "login"}`}
+					style={{ textDecoration: "none" }}
+				>
+					<DefaultButton handleClick={switchState}>
+						{state ? "Registrar" : "Ascender"}
+					</DefaultButton>
+				</Link>
+			</div>
+		</header>
+	)
 }

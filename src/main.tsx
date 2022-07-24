@@ -4,11 +4,14 @@ import App from "./App"
 import "./styles/global.css"
 import "virtual:fonts.css"
 import AuthProvider from "./context/auth"
+import PatientProvider from "./context/patient"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-        <AuthProvider>
-            <App />
-        </AuthProvider>
-    </React.StrictMode>
+	<React.StrictMode>
+		<AuthProvider>
+			<PatientProvider>
+				<App />
+			</PatientProvider>
+		</AuthProvider>
+	</React.StrictMode>
 )

@@ -1,0 +1,10 @@
+.stackWrapper {
+	background: rgba(143, 218, 200, 0.2);
+	border-radius: 20px;
+	margin: 20px;
+	width: 450px;
+
+	&:hover {
+		background-color: #8fdac8;
+	}
+}

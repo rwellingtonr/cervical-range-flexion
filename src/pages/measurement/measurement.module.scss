@@ -1,18 +1,10 @@
 .measurementWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 50px;
 
-    .stack {
-        background: rgba(143, 218, 200, 0.2);
-        border-radius: 20px;
-
-        &:hover {
-            background-color: #8fdac8;
-        }
-    }
-    .register {
-        padding-bottom: 30px;
-    }
+	.title {
+		padding-bottom: 30px;
+	}
 }

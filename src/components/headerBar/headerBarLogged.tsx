@@ -8,23 +8,23 @@ import FloatingActionButtonZoom from "../tabHeader/tabHeader"
 import { useAuth } from "../../context/auth"
 
 export default function HeaderBarLogged() {
-    const { signOut } = useAuth()
+	const { signOut } = useAuth()
 
-    return (
-        <header className={style.headerWrapper}>
-            <div className={style.headerLogo}>
-                <Link to="/measurement" style={{ textDecoration: "none" }}>
-                    <img src={logo} alt="Logo" /> <img src={spine} alt="Espinha Cervical" />
-                </Link>
-            </div>
-            <div className={style.headerMiddle}>
-                <FloatingActionButtonZoom />
-            </div>
-            <div className={style.headerButton}>
-                <Link to={"/"} style={{ textDecoration: "none" }}>
-                    <DefaultButton handleClick={signOut}>Sair</DefaultButton>
-                </Link>
-            </div>
-        </header>
-    )
+	return (
+		<header className={style.headerWrapper}>
+			<div className={style.headerLogo}>
+				<Link to="/measurement" style={{ textDecoration: "none" }}>
+					<img src={logo} alt="Logo" /> <img src={spine} alt="Espinha Cervical" />
+				</Link>
+			</div>
+			<div className={style.headerMiddle}>
+				<FloatingActionButtonZoom />
+			</div>
+			<div className={style.headerButton}>
+				<Link to={"/"} style={{ textDecoration: "none" }}>
+					<DefaultButton handleClick={signOut}>Sair</DefaultButton>
+				</Link>
+			</div>
+		</header>
+	)
 }

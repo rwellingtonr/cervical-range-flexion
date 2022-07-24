@@ -3,13 +3,13 @@ import { Outlet } from "react-router-dom"
 import style from "./patientHistory.module.scss"
 
 function PatientHistory() {
-    return (
-        <main className={style.patientHistWrapper}>
-            <h1>Histórico de Paciente</h1>
+	return (
+		<main className={style.patientHistWrapper}>
+			<h1>Histórico de Paciente</h1>
 
-            <Outlet />
-        </main>
-    )
+			<Outlet />
+		</main>
+	)
 }
 
 export default PatientHistory

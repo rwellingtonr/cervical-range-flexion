@@ -1,25 +1,18 @@
 .divWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
-    .stack {
-        background: rgba(143, 218, 200, 0.2);
-        border-radius: 20px;
-        margin: 20px;
-        &:hover {
-            background-color: #8fdac8;
-        }
-    }
-    .lastRow {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 20px;
 
-        width: 450px;
-    }
+	.lastRow {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 
-    .submit {
-        padding: 20px;
-    }
+		width: 450px;
+	}
+
+	.submit {
+		padding: 20px;
+	}
 }

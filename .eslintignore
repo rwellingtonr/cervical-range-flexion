@@ -1,0 +1,9 @@
+dist
+public
+node_modules
+*.js
+./data
+.vscode
+requirements
+*.spec.ts
+*.test.ts
