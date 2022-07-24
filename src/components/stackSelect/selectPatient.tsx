@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField"
 import { usePatient } from "../../context/patient"
 import { useAuth } from "../../context/auth"
 import { useNavigate } from "react-router-dom"
+import { capitalize } from "@mui/material"
 
 type Patient = {
 	id: string
@@ -43,7 +44,12 @@ export default function SelectPatient() {
 
 	const handleSelect = (name: string) => {
 		const person = patients.find(patient => patient.name === name)
-		setPatient(person as Patient)
+		if (person) {
+			const personName = capitalize(person.name)
+			setPatient({ ...person, name: personName })
+			return
+		}
+		setPatient(null)
 	}
 	return (
 		<Stack spacing={1} className={style.stackWrapper}>

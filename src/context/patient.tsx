@@ -5,9 +5,9 @@ type PatientProvider = {
 	children: ReactNode
 }
 type PatientContextValue = {
-	patient: Patient
+	patient: Patient | null
 	patients: Patient[]
-	setPatient: (patient: Patient) => void
+	setPatient: (patient: Patient | null) => void
 	retrievePatients: () => Promise<void>
 }
 type Patient = {
@@ -22,7 +22,7 @@ type Patient = {
 const PatientContext = createContext({} as PatientContextValue)
 
 export default function PatientProvider({ children }: PatientProvider) {
-	const [patient, setPatient] = useState({} as Patient)
+	const [patient, setPatient] = useState<Patient | null>(null)
 	const [patients, setPatientIds] = useState<Patient[]>([])
 
 	const retrievePatients = async () => {
