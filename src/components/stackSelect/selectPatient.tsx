@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import style from "./selectPatient.module.scss"
 import Autocomplete from "@mui/material/Autocomplete"
 import Stack from "@mui/material/Stack"
@@ -18,16 +18,11 @@ type Patient = {
 }
 
 export default function SelectPatient() {
-	const isFirstRender = useRef<boolean>(true)
 	const { patients, retrievePatients, setPatient } = usePatient()
 	const { signOut } = useAuth()
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false
-			return
-		}
 		retrievePatients().catch(e => {
 			if (e.response.status === 401) {
 				signOut()
@@ -35,7 +30,7 @@ export default function SelectPatient() {
 			}
 			console.error(e)
 		})
-	}, [])
+	}, [retrievePatients])
 
 	const defaultProps = {
 		options: patients,
@@ -65,6 +60,7 @@ export default function SelectPatient() {
 							"& .MuiOutlinedInput-root": { borderRadius: "20px" },
 						}}
 						label="Paciente"
+						placeholder="Selecione o paciente"
 						variant="outlined"
 					/>
 				)}

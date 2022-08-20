@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState, useContext } from "react"
+import React, { createContext, ReactNode, useState, useContext, useCallback } from "react"
 import { api } from "../service/api"
 
 type PatientProvider = {
@@ -27,10 +27,10 @@ export default function PatientProvider({ children }: PatientProvider) {
 	const [patient, setPatient] = useState<Patient | null>(null)
 	const [patients, setPatientIds] = useState<Patient[]>([])
 
-	const retrievePatients = async () => {
+	const retrievePatients = useCallback(async () => {
 		const res = await api.get<Patient[]>("/patient")
 		setPatientIds(res.data)
-	}
+	}, [])
 
 	return (
 		<PatientContext.Provider value={{ patient, patients, setPatient, retrievePatients }}>

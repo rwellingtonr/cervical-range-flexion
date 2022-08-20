@@ -34,7 +34,8 @@ export default function AuthProvider({ children }: AuthProvider) {
 	const [token, setToken] = useState<string>(() => {
 		try {
 			const code = localStorage.getItem("@tcc:token")
-			if (code) api.defaults.headers.common.authorization = `Bearer ${token}`
+
+			if (code) api.defaults.headers.common.authorization = `Bearer ${code}`
 			return code ?? ""
 		} catch (error) {
 			return ""

@@ -2,11 +2,14 @@ import React, { FormEvent, useState } from "react"
 import Box from "@mui/material/Box"
 import style from "./patientRegistration.module.scss"
 import DefaultButton from "../../components/defaultButton.ts/defaultButton"
+import CustomizedSnackbars from "../../components/alert/alert"
+import InputDate from "../../components/inputDate/inputDate"
+import PatientList from "../../components/patientList"
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { api } from "../../service/api"
-import CustomizedSnackbars from "../../components/alert"
-import InputDate from "../../components/inputDate/inputDate"
 import { Person } from "@mui/icons-material"
+import { useAlert } from "../../context/alert"
 
 type Patient = {
 	cpf: string
@@ -14,11 +17,6 @@ type Patient = {
 	gender: string
 	surgery_date: Date
 	birthday: Date
-}
-type FeedBack = {
-	severity: "error" | "info" | "success" | "warning"
-	message: string
-	open: boolean
 }
 
 const inputStyle = {
@@ -35,17 +33,18 @@ function PatientRegistration() {
 	const [gender, setGender] = useState("")
 	const [surgeryDate, setSurgeryDate] = useState<Date>(new Date())
 	const [birthday, setBirthday] = useState<Date>(new Date())
-	const [feedback, setFeedBack] = useState<FeedBack>({
-		open: false,
-		message: "",
-		severity: "success",
-	})
+	const [listPatients, setListPatients] = useState(false)
+
+	const { handleAlert } = useAlert()
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		if (!name.trim() && !cpf.trim()) return
-
 		try {
+			if (!name.trim() && !cpf.trim()) {
+				handleAlert("Campos obrigatórios", "warning")
+				return
+			}
+
 			const patient: Patient = {
 				name,
 				cpf,
@@ -54,24 +53,13 @@ function PatientRegistration() {
 				surgery_date: surgeryDate,
 			}
 
-			const res = await api.post("/patient", patient)
+			await api.post("/patient", patient)
 			cleanUp()
-			setFeedBack({
-				open: true,
-				message: `paciente criado ${res.data.name} com sucesso`,
-				severity: "success",
-			})
+			handleAlert("Cadastrado com sucesso", "success")
 		} catch (err) {
 			console.error(err)
-			setFeedBack({ open: true, message: "Erro ao criar o paciente", severity: "error" })
+			handleAlert("Erro ao cadastrar usuário")
 		}
-	}
-	const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-		if (reason === "clickaway") {
-			return
-		}
-
-		setFeedBack({ ...feedback, open: false })
 	}
 
 	const cleanUp = () => {
@@ -92,105 +80,113 @@ function PatientRegistration() {
 		setSurgeryDate(dateIso)
 	}
 
+	const handleClose = () => {
+		setListPatients(false)
+	}
+
 	return (
-		<main className={style.divWrapper}>
-			<CustomizedSnackbars
-				message={feedback.message}
-				severity={feedback.severity}
-				handleClose={handleClose}
-				open={feedback.open}
-			/>
-			<Box
-				component="form"
-				className={style.formWrapper}
-				sx={{
-					"& .MuiTextField-root": {
-						m: 1,
-						maxWidth: "100%",
-					},
-				}}
-				noValidate
-				autoComplete="off"
-				onSubmit={handleSubmit}
-			>
-				<div className={style.register}>
-					<h1>Cadastro de Paciente</h1>
-				</div>
-				<TextField
-					required
-					fullWidth
-					sx={{ ...inputStyle, "& .MuiOutlinedInput-root": { borderRadius: "20px" } }}
-					id="outlined-required"
-					value={name}
-					label="Nome"
-					placeholder="Entre o nome do paciente"
-					defaultValue=""
-					onChange={e => setName(e.target.value)}
-				/>
-				<div className={style.lastRow}>
-					{" "}
-					<InputDate
-						handleAction={handleSetDate}
-						name={"birthday"}
-						label={"Data de nascimento"}
-					/>
-					<InputDate
-						handleAction={handleSetDate}
-						name={"surgery"}
-						label={"Data da cirurgia"}
-					/>
-				</div>
-				<div className={style.lastRow}>
+		<>
+			<CustomizedSnackbars />
+			<main className={style.divWrapper}>
+				<Box
+					component="form"
+					className={style.formWrapper}
+					sx={{
+						"& .MuiTextField-root": {
+							m: 1,
+							maxWidth: "100%",
+						},
+					}}
+					noValidate
+					autoComplete="off"
+					onSubmit={handleSubmit}
+				>
+					<div className={style.register}>
+						<h1>Cadastro de Paciente</h1>
+					</div>
 					<TextField
 						required
-						sx={{
-							...inputStyle,
-							"& .MuiOutlinedInput-root": { borderRadius: "20px" },
-							width: 280,
-						}}
+						fullWidth
+						sx={{ ...inputStyle, "& .MuiOutlinedInput-root": { borderRadius: "20px" } }}
 						id="outlined-required"
-						value={cpf}
-						label="CPF"
-						placeholder="Entre o CPF do paciente"
-						defaultValue=""
-						name="cpf"
-						onChange={e => setCpf(e.target.value)}
+						value={name}
+						label="Nome"
+						placeholder="Entre o nome do paciente"
+						onChange={e => setName(e.target.value)}
 					/>
-					<>
-						<FormControl
+					<div className={style.lastRow}>
+						{" "}
+						<InputDate
+							handleAction={handleSetDate}
+							name={"birthday"}
+							label={"Data de nascimento"}
+						/>
+						<InputDate
+							handleAction={handleSetDate}
+							name={"surgery"}
+							label={"Data da cirurgia"}
+						/>
+					</div>
+					<div className={style.lastRow}>
+						<TextField
+							required
 							sx={{
-								width: 170,
 								...inputStyle,
 								"& .MuiOutlinedInput-root": { borderRadius: "20px" },
+								width: 280,
 							}}
-						>
-							<InputLabel id="demo-simple-select-label">Gênero</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value={gender}
-								label="gender"
-								name="gender"
-								onChange={e => setGender(e.target.value)}
+							id="outlined-required"
+							value={cpf}
+							label="CPF"
+							placeholder="Entre o CPF do paciente"
+							name="cpf"
+							onChange={e => setCpf(e.target.value)}
+						/>
+						<>
+							<FormControl
+								sx={{
+									width: 170,
+									...inputStyle,
+									"& .MuiOutlinedInput-root": { borderRadius: "20px" },
+								}}
 							>
-								{genders.map((item, i) => (
-									<MenuItem key={i} value={item}>
-										{item}
-									</MenuItem>
-								))}
-							</Select>
-						</FormControl>
-					</>
-				</div>
-				<div className={style.submit}>
-					<DefaultButton handleClick={console.log}>
-						{" "}
-						<Person style={{ paddingRight: "10px" }} />
-						Cadastrar
-					</DefaultButton>
-				</div>
-			</Box>
-		</main>
+								<InputLabel id="demo-simple-select-label">Gênero</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={gender}
+									label="gender"
+									name="gender"
+									onChange={e => setGender(e.target.value)}
+								>
+									{genders.map((item, i) => (
+										<MenuItem key={i} value={item}>
+											{item}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</>
+					</div>
+					<div className={style.submit}>
+						<div>
+							<DefaultButton type="button" handleClick={() => setListPatients(true)}>
+								<FormatListBulletedIcon style={{ paddingRight: "10px" }} />
+								Pacientes
+							</DefaultButton>
+						</div>
+						<div>
+							<DefaultButton>
+								{" "}
+								<Person style={{ paddingRight: "10px" }} />
+								Cadastrar
+							</DefaultButton>
+						</div>
+					</div>
+				</Box>
+				<PatientList handleClose={handleClose} open={listPatients} />
+			</main>
+		</>
 	)
 }
 

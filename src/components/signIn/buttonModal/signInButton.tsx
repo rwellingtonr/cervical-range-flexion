@@ -4,7 +4,7 @@ import style from "./signInButton.module.scss"
 
 type SignButton = {
 	message: string
-	handleClick: () => Promise<void>
+	handleClick?: () => Promise<void>
 }
 
 function SignInButton({ message, handleClick }: SignButton) {
@@ -14,7 +14,8 @@ function SignInButton({ message, handleClick }: SignButton) {
 				className={style.button}
 				variant="contained"
 				size="large"
-				onClick={() => handleClick()}
+				type="submit"
+				onClick={handleClick}
 			>
 				{message}
 			</Button>

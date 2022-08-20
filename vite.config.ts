@@ -27,8 +27,5 @@ export default defineConfig({
 			},
 		}),
 	],
-	server: {
-		port: +process.env.PORT,
-	},
 	test: vitestConfig.test,
 })
