@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect, useState } from "react"
+import React, { createContext, ReactNode, useState, useContext } from "react"
 import { api } from "../service/api"
 
 type PatientProvider = {
@@ -21,6 +21,8 @@ type Patient = {
 
 const PatientContext = createContext({} as PatientContextValue)
 
+export const usePatient = () => useContext(PatientContext)
+
 export default function PatientProvider({ children }: PatientProvider) {
 	const [patient, setPatient] = useState<Patient | null>(null)
 	const [patients, setPatientIds] = useState<Patient[]>([])
@@ -36,5 +38,3 @@ export default function PatientProvider({ children }: PatientProvider) {
 		</PatientContext.Provider>
 	)
 }
-
-export const usePatient = () => React.useContext(PatientContext)
