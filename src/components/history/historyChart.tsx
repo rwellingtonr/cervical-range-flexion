@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams, useSearchParams, Link } from "react-router-dom"
 import { api } from "../../service/api"
 import AreaDisplayChart from "../charts/areaDisplayChart"
@@ -29,7 +29,6 @@ export default function HistoryChart() {
 	const endDate = searchParams.get("endDate")
 	const [data, setData] = useState<MeasureHistory[]>([])
 	const [userName, setUserName] = useState<string>("")
-	const isFirstRender = useRef<boolean>(true)
 
 	useEffect(() => {
 		retrieveData()
