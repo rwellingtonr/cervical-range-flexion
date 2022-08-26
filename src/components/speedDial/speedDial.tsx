@@ -7,43 +7,63 @@ import SaveIcon from "@mui/icons-material/Save"
 import EditIcon from "@mui/icons-material/Edit"
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn"
 import RepeatIcon from "@mui/icons-material/Repeat"
+import style from "./speedDial.module.scss"
+import PlayArrowIcon from "@mui/icons-material/PlayArrow"
+import CancelIcon from "@mui/icons-material/Cancel"
+import ScaleIcon from "@mui/icons-material/Scale"
+import type { ActionsToDo } from "../realTime/realTime"
 
-type SpeedDial = {
-	status: "preload" | "loaded"
+type SpeedDialType = {
+	status: "preload" | "loaded" | "done"
+	handleAction: (action: ActionsToDo) => void
 }
 
 const actionPreLoad = [
-	{ icon: <KeyboardReturnIcon />, name: "Retornar" },
-	{ icon: <SaveIcon />, name: "Save" },
-	{ icon: <RepeatIcon />, name: "Refazer" },
+	{ icon: <KeyboardReturnIcon />, name: "Retornar", action: "return" },
+	{ icon: <ScaleIcon />, name: "Calibrar", action: "tare" },
 ]
 
 const actionsLoaded = [
-	{ icon: <KeyboardReturnIcon />, name: "Retornar" },
-	{ icon: <SaveIcon />, name: "Save" },
-	{ icon: <RepeatIcon />, name: "Refazer" },
+	{ icon: <KeyboardReturnIcon />, name: "Retornar", action: "return" },
+	{ icon: <PlayArrowIcon />, name: "Iniciar", action: "start" },
+	{ icon: <ScaleIcon />, name: "Recalibrar", action: "tare" },
+]
+
+const actionsWhenDone = [
+	{ icon: <SaveIcon />, name: "Salvar", action: "save" },
+	{ icon: <CancelIcon />, name: "Cancelar", action: "cancel" },
 ]
 
 const actionsToTake = {
 	preload: actionPreLoad,
 	loaded: actionsLoaded,
+	done: actionsWhenDone,
 }
 
-export default function OpenIconSpeedDial({ status }: SpeedDial) {
+export default function OpenIconSpeedDial({ status, handleAction }: SpeedDialType) {
 	const actions = useMemo(() => actionsToTake[status], [status])
 
 	return (
-		<Box sx={{ height: 320, transform: "translateZ(0px)", flexGrow: 1 }}>
+		<Box className={style.dialWrapper}>
 			<SpeedDial
 				ariaLabel="SpeedDial openIcon example"
-				sx={{ position: "absolute", bottom: 16, right: 16 }}
+				className={style.speedDial}
+				sx={{
+					"& .css-118zhtq-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab": {
+						background: "#8fdac8",
+					},
+					"& .css-118zhtq-MuiButtonBase-root-MuiFab-root-MuiSpeedDial-fab:hover": {
+						background: "#6DA699",
+					},
+				}}
 				icon={<SpeedDialIcon openIcon={<EditIcon />} />}
 			>
-				{actions.map(action => (
+				{actions.map(item => (
 					<SpeedDialAction
-						key={action.name}
-						icon={action.icon}
-						tooltipTitle={action.name}
+						key={item.name}
+						icon={item.icon}
+						tooltipTitle={item.name}
+						onClick={() => handleAction(item.action as ActionsToDo)}
 					/>
 				))}
 			</SpeedDial>

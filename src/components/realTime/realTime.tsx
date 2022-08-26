@@ -12,7 +12,9 @@ type Measure = {
 	times: number
 	score: number
 }
-type ActionsToTake = "preload" | "loaded"
+type ActionsToTake = "preload" | "loaded" | "done"
+
+export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel"
 
 const counter = (function () {
 	let i = 0
@@ -38,17 +40,16 @@ export default function RealTime() {
 	const [action, setAction] = useState<ActionsToTake>("preload")
 	const [data, setData] = useState<Measure[]>([])
 
+	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
 	useEffect(() => {
 		if (!patient) {
 			navigateToMeasurement()
 		}
-	}, [])
-
-	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
+	}, [navigateToMeasurement])
 
 	useEffect((): any => {
 		const tareEvent = () => {
-			console.log("backTare")
+			console.warn("backTare")
 			counter.reset()
 			setIsTaring(false)
 			setAction("loaded")
@@ -72,7 +73,7 @@ export default function RealTime() {
 	}, [socket])
 
 	const handleCalibrate = () => {
-		console.log("Emit evento para iniciar a calibragem!")
+		console.warn("Emit evento para iniciar a calibragem!")
 		setIsTaring(true)
 		socket.emit("tare")
 	}
@@ -81,6 +82,19 @@ export default function RealTime() {
 		const coffito = localStorage.getItem("@tcc:coffito")
 		const patientId = patient?.id as string
 		socket.emit("start", { patientId, coffito })
+	}
+
+	const actions = {
+		return: () => navigateToMeasurement(),
+		tare: () => handleCalibrate(),
+		start: () => handleStart(),
+		save: () => console.warn("save"),
+		cancel: () => console.warn("cancel"),
+	}
+	const handleAction = (action: ActionsToDo) => {
+		const func = actions[action]
+		if (!func) return
+		func()
 	}
 
 	const formatDate = (date?: Date) => {
@@ -109,7 +123,7 @@ export default function RealTime() {
 					{isTaring ? (
 						<ProgressCircle style={{ padding: "0 20px" }} />
 					) : (
-						<OpenIconSpeedDial status={action} />
+						<OpenIconSpeedDial status={action} handleAction={handleAction} />
 					)}
 				</div>
 			</Box>

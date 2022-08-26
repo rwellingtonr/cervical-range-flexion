@@ -5,7 +5,6 @@ import AreaDisplayChart from "../charts/areaDisplayChart"
 import Box from "@mui/material/Box"
 import style from "./historyChart.module.scss"
 import DefaultButton from "../defaultButton.ts/defaultButton"
-import { capitalize } from "../../utils/format"
 
 type MeasureHistory = {
 	id: string
@@ -36,7 +35,7 @@ export default function HistoryChart() {
 			.catch(e => console.error(e))
 
 		retrieveUser()
-			.then(content => setUserName(capitalize(content.name)))
+			.then(content => setUserName(content.name))
 			.catch(e => console.error(e))
 	}, [id, startDate, endDate])
 
