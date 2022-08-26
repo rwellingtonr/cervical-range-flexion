@@ -1,0 +1,11 @@
+.dialWrapper {
+	height: 100px;
+	transform: translateZ(0px);
+	flex-grow: 1;
+
+	.speedDial {
+		position: absolute;
+		bottom: 16px;
+		right: 16px;
+	}
+}
