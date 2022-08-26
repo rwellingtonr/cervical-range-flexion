@@ -5,13 +5,14 @@ import "./styles/global.css"
 import "virtual:fonts.css"
 import AuthProvider from "./context/auth"
 import PatientProvider from "./context/patient"
+import AlertProvider from "./context/alert"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-	<React.StrictMode>
-		<AuthProvider>
-			<PatientProvider>
+	<AuthProvider>
+		<PatientProvider>
+			<AlertProvider>
 				<App />
-			</PatientProvider>
-		</AuthProvider>
-	</React.StrictMode>
+			</AlertProvider>
+		</PatientProvider>
+	</AuthProvider>
 )

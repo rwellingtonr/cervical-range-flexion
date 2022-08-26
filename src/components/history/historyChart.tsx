@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react"
-import { useParams, useSearchParams } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import { useParams, useSearchParams, Link } from "react-router-dom"
 import { api } from "../../service/api"
 import AreaDisplayChart from "../charts/areaDisplayChart"
 import Box from "@mui/material/Box"
 import style from "./historyChart.module.scss"
 import DefaultButton from "../defaultButton.ts/defaultButton"
-import { Link } from "react-router-dom"
 import { capitalize } from "../../utils/format"
 
 type MeasureHistory = {
@@ -30,13 +29,8 @@ export default function HistoryChart() {
 	const endDate = searchParams.get("endDate")
 	const [data, setData] = useState<MeasureHistory[]>([])
 	const [userName, setUserName] = useState<string>("")
-	const isFirstRender = useRef<boolean>(true)
 
 	useEffect(() => {
-		if (isFirstRender.current) {
-			isFirstRender.current = false
-			return
-		}
 		retrieveData()
 			.then(content => setData(content))
 			.catch(e => console.error(e))

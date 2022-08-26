@@ -1,39 +1,54 @@
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
+import React, { FormEvent, useState, KeyboardEvent } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import InputTxt from "./inputTxt"
 import style from "./sign.module.scss"
 import InputPassword from "./inputPassword"
 import SignInButton from "./buttonModal/signInButton"
-import { useNavigate } from "react-router-dom"
 import { api } from "../../service/api"
+import { useAlert } from "../../context/alert"
+import CustomizedSnackbars from "../alert/alert"
 
 export default function SignUp() {
 	const [coffito, setCoffito] = useState<string>("")
 	const [password, setPassword] = useState<string>("")
 	const [userName, setUserName] = useState<string>("")
+	const { handleAlert } = useAlert()
 
 	const navigate = useNavigate()
 
 	const handleRegister = async () => {
 		try {
-			const userInfo = {
-				coffito,
-				password,
-				name: userName,
+			if (coffito.trim() && password.trim() && userName.trim()) {
+				const userInfo = {
+					coffito,
+					password,
+					name: userName,
+				}
+				await api.post("/physiotherapist", userInfo)
+				navigate("/sign/login", { replace: true })
 			}
-
-			await api.post("/physiotherapist", userInfo)
-			navigate("/sign/login", { replace: true })
+			handleAlert("Preencha todos os campos", "warning")
 		} catch (error) {
 			console.error(error)
+			handleAlert("Verifique os campos")
 		}
 	}
-	const handleKeyPress = async (event: React.KeyboardEvent<HTMLFormElement>) => {
-		if (event.key === "Enter") return await handleRegister()
+	const handleKeyPress = async (event: KeyboardEvent<HTMLFormElement>) => {
+		if (event.key === "Enter") {
+			event.preventDefault()
+			await handleRegister()
+		}
 	}
+
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault()
+		await handleRegister()
+	}
+
 	return (
 		<div className={style.formWrapper}>
+			<CustomizedSnackbars />
 			<Box
 				component="form"
 				className={style.form}
@@ -46,6 +61,7 @@ export default function SignUp() {
 				}}
 				noValidate
 				autoComplete="off"
+				onSubmit={handleSubmit}
 				onKeyPress={handleKeyPress}
 			>
 				<div>
@@ -53,18 +69,24 @@ export default function SignUp() {
 				</div>
 				<InputTxt
 					label="Nome"
+					value={userName}
 					placeHolder="Informe seu nome completo"
 					fillIn={setUserName}
 				/>
-				<InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
+				<InputTxt
+					label="Coffito"
+					value={coffito}
+					placeHolder="Informe seu Coffito"
+					fillIn={setCoffito}
+				/>
 
 				<InputPassword setPassword={setPassword} password={password} />
 				<div>
-					<Link to="/sign/password">
+					<Link to="/sign/password" style={{ textDecoration: "none", color: "inherit" }}>
 						<p>Esqueci minha senha</p>
 					</Link>
 				</div>
-				<SignInButton message={"Registrar"} handleClick={handleRegister} />
+				<SignInButton message={"Registrar"} />
 			</Box>
 		</div>
 	)

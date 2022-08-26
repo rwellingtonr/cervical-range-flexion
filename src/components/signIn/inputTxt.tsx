@@ -3,10 +3,11 @@ import TextField from "@mui/material/TextField"
 type Props = {
 	label: string
 	placeHolder: string
+	value: string
 	fillIn: (event: string) => void
 }
 
-export default function InputTxt({ label, placeHolder, fillIn }: Props) {
+export default function InputTxt({ value, label, placeHolder, fillIn }: Props) {
 	return (
 		<div>
 			{" "}
@@ -16,7 +17,7 @@ export default function InputTxt({ label, placeHolder, fillIn }: Props) {
 				id="outlined-required"
 				label={label}
 				placeholder={placeHolder}
-				defaultValue=""
+				value={value}
 				onChange={e => fillIn(e.target.value)}
 			/>
 		</div>

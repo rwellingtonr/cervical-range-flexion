@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import AreaDisplayChart from "../charts/areaDisplayChart"
 import ProgressCircle from "../circularProgress"
-import DefaultButton from "../defaultButton.ts/defaultButton"
 import Box from "@mui/material/Box"
 import style from "./realTime.module.scss"
 import { socket } from "../../service/websocket"
 import { usePatient } from "../../context/patient"
 import { useNavigate } from "react-router-dom"
+import OpenIconSpeedDial from "../speedDial/speedDial"
 
 type Measure = {
 	times: number
 	score: number
 }
+type ActionsToTake = "preload" | "loaded"
 
 const counter = (function () {
 	let i = 0
@@ -34,21 +35,23 @@ export default function RealTime() {
 	const { patient } = usePatient()
 	const navigate = useNavigate()
 	const [isTaring, setIsTaring] = useState<boolean>(false)
-	const [startMeasure, setStartMeasure] = useState<boolean>(false)
+	const [action, setAction] = useState<ActionsToTake>("preload")
 	const [data, setData] = useState<Measure[]>([])
 
 	useEffect(() => {
 		if (!patient) {
-			navigate("/measurement")
+			navigateToMeasurement()
 		}
 	}, [])
+
+	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
 
 	useEffect((): any => {
 		const tareEvent = () => {
 			console.log("backTare")
 			counter.reset()
 			setIsTaring(false)
-			setStartMeasure(true)
+			setAction("loaded")
 		}
 		socket.on("tare", tareEvent)
 		return () => socket.off("tare", tareEvent)
@@ -103,12 +106,10 @@ export default function RealTime() {
 					</div>
 				</div>
 				<div>
-					{isTaring && <ProgressCircle style={{ padding: "0 20px" }} />}
-					{!isTaring && !startMeasure && (
-						<DefaultButton handleClick={handleCalibrate}> Calibrar </DefaultButton>
-					)}
-					{!isTaring && startMeasure && (
-						<DefaultButton handleClick={handleStart}> Iniciar </DefaultButton>
+					{isTaring ? (
+						<ProgressCircle style={{ padding: "0 20px" }} />
+					) : (
+						<OpenIconSpeedDial status={action} />
 					)}
 				</div>
 			</Box>
