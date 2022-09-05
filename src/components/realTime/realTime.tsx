@@ -7,6 +7,8 @@ import { socket } from "../../service/websocket"
 import { usePatient } from "../../context/patient"
 import { useNavigate } from "react-router-dom"
 import OpenIconSpeedDial from "../speedDial/speedDial"
+import { useAlert } from "../../context/alert"
+import CustomizedSnackbars from "../alert/alert"
 
 type Measure = {
 	times: number
@@ -14,7 +16,7 @@ type Measure = {
 }
 type ActionsToTake = "preload" | "loaded" | "done"
 
-export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel"
+export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel" | "reconnect"
 
 const counter = (function () {
 	let i = 0
@@ -39,12 +41,11 @@ export default function RealTime() {
 	const [isTaring, setIsTaring] = useState<boolean>(false)
 	const [action, setAction] = useState<ActionsToTake>("preload")
 	const [data, setData] = useState<Measure[]>([])
+	const { handleAlert } = useAlert()
 
 	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
 	useEffect(() => {
-		if (!patient) {
-			navigateToMeasurement()
-		}
+		if (!patient) navigateToMeasurement()
 	}, [navigateToMeasurement])
 
 	useEffect((): any => {
@@ -72,8 +73,17 @@ export default function RealTime() {
 		return () => socket.off("measurement", measurementEvent)
 	}, [socket])
 
+	useEffect((): any => {
+		const handleMessage = ({ msg }: { msg: string }) => {
+			setIsTaring(false)
+			setAction("preload")
+			handleAlert(msg)
+		}
+		socket.on("error", handleMessage)
+		return () => socket.off("error", handleMessage)
+	}, [socket])
+
 	const handleCalibrate = () => {
-		console.warn("Emit evento para iniciar a calibragem!")
 		setIsTaring(true)
 		socket.emit("tare")
 	}
@@ -88,8 +98,9 @@ export default function RealTime() {
 		return: () => navigateToMeasurement(),
 		tare: () => handleCalibrate(),
 		start: () => handleStart(),
-		save: () => console.warn("save"),
-		cancel: () => console.warn("cancel"),
+		save: () => socket.emit("save"),
+		cancel: () => socket.emit("abort"),
+		reconnect: () => socket.emit("reconect-arduino"),
 	}
 	const handleAction = (action: ActionsToDo) => {
 		const func = actions[action]
@@ -106,6 +117,7 @@ export default function RealTime() {
 
 	return (
 		<div>
+			<CustomizedSnackbars />
 			<AreaDisplayChart dataValues={data} xAxis={"times"} areaValue={"score"} />
 			<Box className={style.boxWrapper}>
 				<div className={style.displayInfo}>

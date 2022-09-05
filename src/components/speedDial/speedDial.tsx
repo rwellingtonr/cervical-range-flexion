@@ -6,11 +6,11 @@ import SpeedDialAction from "@mui/material/SpeedDialAction"
 import SaveIcon from "@mui/icons-material/Save"
 import EditIcon from "@mui/icons-material/Edit"
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn"
-import RepeatIcon from "@mui/icons-material/Repeat"
 import style from "./speedDial.module.scss"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import CancelIcon from "@mui/icons-material/Cancel"
 import ScaleIcon from "@mui/icons-material/Scale"
+import SettingsInputHdmiIcon from "@mui/icons-material/SettingsInputHdmi"
 import type { ActionsToDo } from "../realTime/realTime"
 
 type SpeedDialType = {
@@ -21,6 +21,7 @@ type SpeedDialType = {
 const actionPreLoad = [
 	{ icon: <KeyboardReturnIcon />, name: "Retornar", action: "return" },
 	{ icon: <ScaleIcon />, name: "Calibrar", action: "tare" },
+	{ icon: <SettingsInputHdmiIcon />, name: "Reconectar", action: "reconnect" },
 ]
 
 const actionsLoaded = [
