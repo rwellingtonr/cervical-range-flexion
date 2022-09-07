@@ -18,7 +18,7 @@ type ActionsToTake = "preload" | "loaded" | "done"
 
 export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel" | "reconnect"
 
-const counter = (function () {
+const counter = (() => {
 	let i = 0
 
 	function reset() {
@@ -34,7 +34,6 @@ const counter = (function () {
 		increment: () => increment(),
 	}
 })()
-
 export default function RealTime() {
 	const { patient } = usePatient()
 	const navigate = useNavigate()
@@ -65,7 +64,6 @@ export default function RealTime() {
 				score,
 				times: counter.increment(),
 			}
-			console.log(dataToPush)
 			setData(prev => [...prev, dataToPush])
 		}
 
@@ -81,6 +79,15 @@ export default function RealTime() {
 		}
 		socket.on("error", handleMessage)
 		return () => socket.off("error", handleMessage)
+	}, [socket])
+
+	useEffect((): any => {
+		const handleEndProcess = () => {
+			setAction("done")
+			handleAlert("Processo finalizado", "info")
+		}
+		socket.on("end", handleEndProcess)
+		return () => socket.off("end", handleEndProcess)
 	}, [socket])
 
 	const handleCalibrate = () => {
