@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react"
+import React, { FormEvent, useState, useRef } from "react"
 import Box from "@mui/material/Box"
 import style from "./patientRegistration.module.scss"
 import DefaultButton from "../../components/defaultButton.ts/defaultButton"
@@ -28,6 +28,7 @@ const inputStyle = {
 const genders = ["masculino", "feminino", "outro"]
 
 function PatientRegistration() {
+	const inputCpf = useRef(null)
 	const [name, setName] = useState("")
 	const [cpf, setCpf] = useState("")
 	const [gender, setGender] = useState("")
@@ -84,6 +85,14 @@ function PatientRegistration() {
 		setListPatients(false)
 	}
 
+	const handleCPF = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const formatted = event.target.value
+			.replace(/\s/g, "")
+			.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+
+		setCpf(formatted)
+	}
+
 	return (
 		<>
 			<CustomizedSnackbars />
@@ -138,9 +147,10 @@ function PatientRegistration() {
 							id="outlined-required"
 							value={cpf}
 							label="CPF"
-							placeholder="Entre o CPF do paciente"
+							ref={inputCpf}
+							placeholder="999.999.999-99"
 							name="cpf"
-							onChange={e => setCpf(e.target.value)}
+							onChange={handleCPF}
 						/>
 						<>
 							<FormControl
