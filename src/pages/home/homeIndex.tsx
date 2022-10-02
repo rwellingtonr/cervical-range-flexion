@@ -25,7 +25,7 @@ export default function HomeIndex() {
 			<Grid item xs={12}>
 				<Link to="/sign/login" style={{ textDecoration: "none" }}>
 					<Button variant="contained" size="large" className={style.button}>
-						Ascender
+						Começar
 					</Button>
 				</Link>
 			</Grid>

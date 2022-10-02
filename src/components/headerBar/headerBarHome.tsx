@@ -22,7 +22,7 @@ export default function headerBarHome() {
 					style={{ textDecoration: "none" }}
 				>
 					<DefaultButton handleClick={switchState}>
-						{state ? "Registrar" : "Ascender"}
+						{state ? "Registrar" : "Começar"}
 					</DefaultButton>
 				</Link>
 			</div>
