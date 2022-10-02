@@ -10,11 +10,16 @@ type FormsOptions = {
 }
 type actionOptions = "login" | "register" | "password"
 
-const formsOptions: FormsOptions = {
-	login: <SignIn />,
-	register: <SignUp />,
-	password: <RetrievePassword />,
+const validateCrefito = (crefito: string): boolean => {
+	const document = crefito.trim()
+	return document.length >= 8 ? true : false
 }
+const formsOptions: FormsOptions = {
+	login: <SignIn validateCrefito={validateCrefito} />,
+	register: <SignUp validateCrefito={validateCrefito} />,
+	password: <RetrievePassword validateCrefito={validateCrefito} />,
+}
+
 export default function SignOption() {
 	const { actions } = useParams()
 
