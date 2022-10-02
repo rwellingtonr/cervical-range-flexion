@@ -11,7 +11,7 @@ type MeasureHistory = {
 	measurement_date: Date
 	score: number
 	patient_id: string
-	physio_coffito: string
+	physio_crefito: string
 }
 type Patient = {
 	id: string

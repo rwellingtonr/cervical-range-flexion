@@ -10,7 +10,7 @@ import { useAlert } from "../../context/alert"
 import CustomizedSnackbars from "../alert/alert"
 
 export default function SignUp() {
-	const [coffito, setCoffito] = useState<string>("")
+	const [crefito, setCrefito] = useState<string>("")
 	const [password, setPassword] = useState<string>("")
 	const [userName, setUserName] = useState<string>("")
 	const { handleAlert } = useAlert()
@@ -19,9 +19,9 @@ export default function SignUp() {
 
 	const handleRegister = async () => {
 		try {
-			if (coffito.trim() && password.trim() && userName.trim()) {
+			if (crefito.trim() && password.trim() && userName.trim()) {
 				const userInfo = {
-					coffito,
+					crefito,
 					password,
 					name: userName,
 				}
@@ -74,10 +74,10 @@ export default function SignUp() {
 					fillIn={setUserName}
 				/>
 				<InputTxt
-					label="Coffito"
-					value={coffito}
-					placeHolder="Informe seu Coffito"
-					fillIn={setCoffito}
+					label="Crefito"
+					value={crefito}
+					placeHolder="Informe seu Crefito"
+					fillIn={setCrefito}
 				/>
 
 				<InputPassword setPassword={setPassword} password={password} />

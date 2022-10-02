@@ -96,9 +96,9 @@ export default function RealTime() {
 	}
 
 	const handleStart = () => {
-		const coffito = localStorage.getItem("@tcc:coffito")
+		const crefito = localStorage.getItem("@tcc:crefito")
 		const patientId = patient?.id as string
-		socket.emit("start", { patientId, coffito })
+		socket.emit("start", { patientId, crefito })
 	}
 
 	const actions = {

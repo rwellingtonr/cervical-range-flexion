@@ -13,7 +13,7 @@ type AuthContextValue = {
 type Physiotherapist = {
 	id: string
 	name: string
-	coffito: string
+	crefito: string
 }
 
 type LogIn = {
@@ -22,7 +22,7 @@ type LogIn = {
 }
 
 type SignIn = {
-	coffito: string
+	crefito: string
 	password: string
 }
 
@@ -46,7 +46,7 @@ export default function AuthProvider({ children }: AuthProvider) {
 		const res = await api.post<LogIn>("signin", signIn)
 		const { token, physiotherapist } = res.data
 		localStorage.setItem("@tcc:token", token)
-		localStorage.setItem("@tcc:coffito", physiotherapist.coffito)
+		localStorage.setItem("@tcc:crefito", physiotherapist.crefito)
 		api.defaults.headers.common.authorization = `Bearer ${token}`
 		setToken(token)
 	}
@@ -54,7 +54,7 @@ export default function AuthProvider({ children }: AuthProvider) {
 	const signOut = () => {
 		setToken("")
 		localStorage.removeItem("@tcc:token")
-		localStorage.removeItem("@tcc:coffito")
+		localStorage.removeItem("@tcc:crefito")
 	}
 
 	return (

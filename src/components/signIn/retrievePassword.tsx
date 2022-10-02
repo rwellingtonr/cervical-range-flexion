@@ -7,7 +7,7 @@ import InputPassword from "./inputPassword"
 import SignInButton from "./buttonModal/signInButton"
 
 export default function RetrievePassword() {
-	const [coffito, setCoffito] = useState<string>("")
+	const [crefito, setCrefito] = useState<string>("")
 	const [password, setPassword] = useState<string>("")
 	const navigate = useNavigate()
 
@@ -43,7 +43,7 @@ export default function RetrievePassword() {
 					<h1>Nova Senha</h1>
 				</div>
 
-				<InputTxt label="Coffito" placeHolder="Informe seu Coffito" fillIn={setCoffito} />
+				<InputTxt label="Crefito" placeHolder="Informe seu Crefito" fillIn={setCrefito} />
 
 				<InputPassword setPassword={setPassword} password={password} />
 

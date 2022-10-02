@@ -13,13 +13,13 @@ export default function SignIn() {
 	const { signIn } = useAuth()
 	const { handleAlert } = useAlert()
 	const navigate = useNavigate()
-	const [coffito, setCoffito] = useState<string>("")
+	const [crefito, setCrefito] = useState<string>("")
 	const [password, setPassword] = useState<string>("")
 
 	const handleSignIn = async () => {
 		try {
-			if (coffito.trim() && password.trim()) {
-				await signIn({ coffito, password })
+			if (crefito.trim() && password.trim()) {
+				await signIn({ crefito, password })
 				navigate("/measurement", { replace: true })
 			}
 
@@ -28,7 +28,7 @@ export default function SignIn() {
 			console.error("Error ao tentar fazer o logIn", error)
 			handleAlert("Error ao tentar fazer o logIn")
 		}
-		setCoffito("")
+		setCrefito("")
 		setPassword("")
 	}
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -65,10 +65,10 @@ export default function SignIn() {
 				</div>
 
 				<InputTxt
-					label="Coffito"
-					value={coffito}
-					placeHolder="Informe seu Coffito"
-					fillIn={setCoffito}
+					label="Crefito"
+					value={crefito}
+					placeHolder="Informe seu Crefito"
+					fillIn={setCrefito}
 				/>
 
 				<InputPassword setPassword={setPassword} password={password} />
