@@ -9,7 +9,11 @@ import { api } from "../../service/api"
 import { useAlert } from "../../context/alert"
 import CustomizedSnackbars from "../alert/alert"
 
-export default function SignUp() {
+type SignUpProps = {
+	validateCrefito: (crefito: string) => boolean
+}
+
+export default function SignUp({ validateCrefito }: SignUpProps) {
 	const [crefito, setCrefito] = useState<string>("")
 	const [password, setPassword] = useState<string>("")
 	const [userName, setUserName] = useState<string>("")
@@ -19,19 +23,22 @@ export default function SignUp() {
 
 	const handleRegister = async () => {
 		try {
-			if (crefito.trim() && password.trim() && userName.trim()) {
-				const userInfo = {
-					crefito,
-					password,
-					name: userName,
-				}
-				await api.post("/physiotherapist", userInfo)
-				navigate("/sign/login", { replace: true })
+			const isValidCrefito = validateCrefito(crefito)
+			if (!isValidCrefito) return handleAlert("Crefito inválido", "warning")
+			if (!password.trim() || !userName.trim()) {
+				return handleAlert("Usuário ou senha inválida", "warning")
 			}
-			handleAlert("Preencha todos os campos", "warning")
+
+			const userInfo = {
+				crefito,
+				password,
+				name: userName,
+			}
+			await api.post("/physiotherapist", userInfo)
+			navigate("/sign/login", { replace: true })
 		} catch (error) {
 			console.error(error)
-			handleAlert("Verifique os campos")
+			handleAlert("Verifique os campos preenchidos")
 		}
 	}
 	const handleKeyPress = async (event: KeyboardEvent<HTMLFormElement>) => {
@@ -76,7 +83,7 @@ export default function SignUp() {
 				<InputTxt
 					label="Crefito"
 					value={crefito}
-					placeHolder="Informe seu Crefito"
+					placeHolder="Informe seu Crefito, exemplo: 8123456TO"
 					fillIn={setCrefito}
 				/>
 

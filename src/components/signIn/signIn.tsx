@@ -9,7 +9,11 @@ import SignInButton from "./buttonModal/signInButton"
 import CustomizedSnackbars from "../alert/alert"
 import { useAlert } from "../../context/alert"
 
-export default function SignIn() {
+type SignInProps = {
+	validateCrefito: (crefito: string) => boolean
+}
+
+export default function SignIn({ validateCrefito }: SignInProps) {
 	const { signIn } = useAuth()
 	const { handleAlert } = useAlert()
 	const navigate = useNavigate()
@@ -18,19 +22,23 @@ export default function SignIn() {
 
 	const handleSignIn = async () => {
 		try {
-			if (crefito.trim() && password.trim()) {
-				await signIn({ crefito, password })
-				navigate("/measurement", { replace: true })
-			}
+			const isValidCrefito = validateCrefito(crefito)
+			if (!isValidCrefito) return handleError("Crefito inválido", "warning")
+			if (!password.trim()) return handleError("Senha inválida", "warning")
 
-			handleAlert("Preencha todos os campos", "warning")
+			await signIn({ crefito, password })
+			navigate("/measurement", { replace: true })
 		} catch (error) {
 			console.error("Error ao tentar fazer o logIn", error)
-			handleAlert("Error ao tentar fazer o logIn")
+			handleError("Error ao tentar fazer o logIn")
 		}
+	}
+	function handleError(msg: string, type?: string) {
 		setCrefito("")
 		setPassword("")
+		handleAlert(msg, type)
 	}
+
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		await handleSignIn()
@@ -67,7 +75,7 @@ export default function SignIn() {
 				<InputTxt
 					label="Crefito"
 					value={crefito}
-					placeHolder="Informe seu Crefito"
+					placeHolder="Informe seu Crefito, exemplo: 8123456TO"
 					fillIn={setCrefito}
 				/>
 
