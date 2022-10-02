@@ -18,6 +18,11 @@ type ActionsToTake = "preload" | "loaded" | "done"
 
 export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel" | "reconnect"
 
+type SerialMessage = {
+	msg: string
+	status: string
+}
+
 const counter = (() => {
 	let i = 0
 
@@ -72,13 +77,13 @@ export default function RealTime() {
 	}, [socket])
 
 	useEffect((): any => {
-		const handleMessage = ({ msg }: { msg: string }) => {
+		const handleMessage = ({ msg, status }: SerialMessage) => {
 			setIsTaring(false)
 			setAction("preload")
-			handleAlert(msg)
+			handleAlert(msg, status)
 		}
-		socket.on("error", handleMessage)
-		return () => socket.off("error", handleMessage)
+		socket.on("message", handleMessage)
+		return () => socket.off("message", handleMessage)
 	}, [socket])
 
 	useEffect((): any => {
