@@ -7,7 +7,20 @@
 	padding: 0 20px;
 	width: 750px;
 	min-height: 40px;
+	.actionsWrapper {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 
+		.dot {
+			height: 20px;
+			width: 20px;
+			border-radius: 50%;
+			display: inline-block;
+			box-shadow: 1px 1px 1px #bbb;
+			margin-right: 3px;
+		}
+	}
 	.displayInfo {
 		display: flex;
 		flex-direction: column;
