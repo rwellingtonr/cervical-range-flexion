@@ -14,13 +14,12 @@ import SettingsInputHdmiIcon from "@mui/icons-material/SettingsInputHdmi"
 import type { ActionsToDo } from "../realTime/realTime"
 
 type SpeedDialType = {
-	status: "preload" | "loaded" | "done"
+	status: "disconnected" | "loaded" | "done"
 	handleAction: (action: ActionsToDo) => void
 }
 
-const actionPreLoad = [
+const disconnectedActions = [
 	{ icon: <KeyboardReturnIcon />, name: "Retornar", action: "return" },
-	{ icon: <ScaleIcon />, name: "Calibrar", action: "tare" },
 	{ icon: <SettingsInputHdmiIcon />, name: "Reconectar", action: "reconnect" },
 ]
 
@@ -36,7 +35,7 @@ const actionsWhenDone = [
 ]
 
 const actionsToTake = {
-	preload: actionPreLoad,
+	disconnected: disconnectedActions,
 	loaded: actionsLoaded,
 	done: actionsWhenDone,
 }

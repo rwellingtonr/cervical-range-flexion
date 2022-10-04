@@ -14,9 +14,9 @@ type Measure = {
 	times: number
 	score: number
 }
-type ActionsToTake = "preload" | "loaded" | "done"
+type ActionsToTake = "disconnected" | "loaded" | "done"
 
-export type ActionsToDo = "return" | "tare" | "start" | "save" | "cancel" | "reconnect"
+export type ActionsToDo = "return" | "start" | "save" | "cancel" | "reconnect"
 
 type SerialMessage = {
 	msg: string
@@ -35,15 +35,15 @@ const counter = (() => {
 	}
 
 	return {
-		reset: () => reset(),
-		increment: () => increment(),
+		reset,
+		increment,
 	}
 })()
 export default function RealTime() {
 	const { patient } = usePatient()
 	const navigate = useNavigate()
 	const [isTaring, setIsTaring] = useState<boolean>(false)
-	const [action, setAction] = useState<ActionsToTake>("preload")
+	const [action, setAction] = useState<ActionsToTake>("disconnected")
 	const [data, setData] = useState<Measure[]>([])
 	const { handleAlert } = useAlert()
 
@@ -51,6 +51,18 @@ export default function RealTime() {
 	useEffect(() => {
 		if (!patient) navigateToMeasurement()
 	}, [navigateToMeasurement])
+
+	useEffect(() => {
+		socket.emit("status")
+		console.log("Passou aqui")
+	}, [])
+	useEffect((): any => {
+		const handleStatus = (payload: { status: ActionsToTake }) => {
+			setAction(payload.status)
+		}
+		socket.on("status", handleStatus)
+		return () => socket.off("status", handleStatus)
+	}, [socket])
 
 	useEffect((): any => {
 		const tareEvent = () => {
@@ -76,15 +88,15 @@ export default function RealTime() {
 		return () => socket.off("measurement", measurementEvent)
 	}, [socket])
 
-	useEffect((): any => {
-		const handleMessage = ({ msg, status }: SerialMessage) => {
-			setIsTaring(false)
-			setAction("preload")
-			handleAlert(msg, status)
-		}
-		socket.on("message", handleMessage)
-		return () => socket.off("message", handleMessage)
-	}, [socket])
+	// useEffect((): any => {
+	// 	const handleMessage = ({ msg, status }: SerialMessage) => {
+	// 		setIsTaring(false)
+	// 		setAction("loaded")
+	// 		handleAlert(msg, status)
+	// 	}
+	// 	socket.on("message", handleMessage)
+	// 	return () => socket.off("message", handleMessage)
+	// }, [socket])
 
 	useEffect((): any => {
 		const handleEndProcess = () => {
@@ -97,7 +109,7 @@ export default function RealTime() {
 
 	const handleCalibrate = () => {
 		setIsTaring(true)
-		socket.emit("tare")
+		socket.emit("reconect-arduino")
 	}
 
 	const handleStart = () => {
@@ -108,11 +120,10 @@ export default function RealTime() {
 
 	const actions = {
 		return: () => navigateToMeasurement(),
-		tare: () => handleCalibrate(),
 		start: () => handleStart(),
 		save: () => socket.emit("save"),
 		cancel: () => socket.emit("abort"),
-		reconnect: () => socket.emit("reconect-arduino"),
+		reconnect: () => handleCalibrate(),
 	}
 	const handleAction = (action: ActionsToDo) => {
 		const func = actions[action]
@@ -147,7 +158,19 @@ export default function RealTime() {
 					{isTaring ? (
 						<ProgressCircle style={{ padding: "0 20px" }} />
 					) : (
-						<OpenIconSpeedDial status={action} handleAction={handleAction} />
+						<div className={style.actionsWrapper}>
+							<OpenIconSpeedDial status={action} handleAction={handleAction} />
+							<>
+								<span
+									style={{
+										backgroundColor:
+											action === "disconnected" ? "#bbb" : "#8fdac8",
+									}}
+									className={style.dot}
+								/>
+								<p>{action === "disconnected" ? "Desconectado" : "Ligado"}</p>
+							</>
+						</div>
 					)}
 				</div>
 			</Box>
