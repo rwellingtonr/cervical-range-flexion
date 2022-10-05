@@ -12,6 +12,7 @@ type MeasureHistory = {
 	score: number
 	patient_id: string
 	physio_crefito: string
+	patient: Patient
 }
 type Patient = {
 	id: string
@@ -27,15 +28,10 @@ export default function HistoryChart() {
 	const startDate = searchParams.get("startDate")
 	const endDate = searchParams.get("endDate")
 	const [data, setData] = useState<MeasureHistory[]>([])
-	const [userName, setUserName] = useState<string>("")
 
 	useEffect(() => {
 		retrieveData()
 			.then(content => setData(content))
-			.catch(e => console.error(e))
-
-		retrieveUser()
-			.then(content => setUserName(content.name))
 			.catch(e => console.error(e))
 	}, [id, startDate, endDate])
 
@@ -47,11 +43,6 @@ export default function HistoryChart() {
 			},
 		})
 
-		return res.data
-	}
-
-	const retrieveUser = async () => {
-		const res = await api.get<Patient>(`/patient/${id}`)
 		return res.data
 	}
 
@@ -80,7 +71,7 @@ export default function HistoryChart() {
 			<AreaDisplayChart dataValues={data} xAxis={"measurement_date"} areaValue={"score"} />
 			<Box className={style.boxWrapper}>
 				<div className={style.displayInfo}>
-					<h2 className={style.tableHeader}>{userName}</h2>
+					<h2 className={style.tableHeader}>{data[0].patient.name}</h2>
 					<div className={style.tableWrapper}>
 						<h4>Período: </h4>
 						<p>{period()}</p>
@@ -98,6 +89,15 @@ export default function HistoryChart() {
 			</Box>
 		</>
 	) : (
-		<></>
+		<Box component={"div"} className={style.notFoundWrapper}>
+			<h3 className={style.notFoundSubtitle}>
+				Nenhuma coleta foi encontrada para esse paciente
+			</h3>
+			<div className={style.actionButtonWrapper}>
+				<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
+					<DefaultButton>Voltar</DefaultButton>
+				</Link>
+			</div>
+		</Box>
 	)
 }
