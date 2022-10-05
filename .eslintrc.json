@@ -23,7 +23,7 @@
 		"no-self-assign": "error",
 		"no-func-assign": "error",
 		"eqeqeq": ["error", "always"],
-		"no-console": ["error", { "allow": ["warn", "error"] }],
+		//"no-console": ["error", { "allow": ["warn", "error"] }],
 		"no-duplicate-imports": "error"
 	}
 }
