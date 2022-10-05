@@ -53,29 +53,47 @@ export default function RealTime() {
 	}, [navigateToMeasurement])
 
 	useEffect(() => {
+		console.log("Aqui!")
 		socket.emit("status")
-		console.log("Passou aqui")
 	}, [])
-	useEffect((): any => {
-		const handleStatus = (payload: { status: ActionsToTake }) => {
-			setAction(payload.status)
-		}
-		socket.on("status", handleStatus)
-		return () => socket.off("status", handleStatus)
-	}, [socket])
+	// useEffect((): any => {
+	// 	const handleStatus = (payload: { status: ActionsToTake }) => {
+	// 		setAction(payload.status)
+	// 	}
+	// 	socket.on("status", handleStatus)
+	// 	return () => socket.off("status", handleStatus)
+	// }, [socket])
+
+	// useEffect((): any => {
+	// 	const tareEvent = () => {
+	// 		console.warn("backTare")
+	// 		counter.reset()
+	// 		setIsTaring(false)
+	// 		setAction("loaded")
+	// 	}
+	// 	socket.on("tare", tareEvent)
+	// 	return () => socket.off("tare", tareEvent)
+	// }, [socket])
+
+	// useEffect((): any => {
+	// 	const measurementEvent = ({ score }: Measure) => {
+	// 		const dataToPush: Measure = {
+	// 			score,
+	// 			times: counter.increment(),
+	// 		}
+	// 		setData(prev => [...prev, dataToPush])
+	// 	}
+
+	// 	socket.on("measurement", measurementEvent)
+	// 	return () => socket.off("measurement", measurementEvent)
+	// }, [socket])
 
 	useEffect((): any => {
-		const tareEvent = () => {
-			console.warn("backTare")
-			counter.reset()
-			setIsTaring(false)
-			setAction("loaded")
+		const handleMessage = ({ msg, status }: SerialMessage) => {
+			console.log(`Passou aqui, isTaring: ${isTaring}`)
+			if (status === "error") setIsTaring(false)
+			handleAlert(msg, status)
 		}
-		socket.on("tare", tareEvent)
-		return () => socket.off("tare", tareEvent)
-	}, [socket])
-
-	useEffect((): any => {
 		const measurementEvent = ({ score }: Measure) => {
 			const dataToPush: Measure = {
 				score,
@@ -83,33 +101,40 @@ export default function RealTime() {
 			}
 			setData(prev => [...prev, dataToPush])
 		}
+		const handleStatus = (payload: { status: ActionsToTake }) => {
+			setAction(payload.status)
+		}
+		const tareEvent = () => {
+			console.warn("backTare")
+			counter.reset()
+			setIsTaring(false)
+			setAction("loaded")
+		}
 
+		socket.on("tare", tareEvent)
+		socket.on("status", handleStatus)
 		socket.on("measurement", measurementEvent)
-		return () => socket.off("measurement", measurementEvent)
+		socket.on("message", handleMessage)
+		return () => {
+			socket.off("status", handleStatus)
+			socket.off("message", handleMessage)
+			socket.off("measurement", measurementEvent)
+			socket.off("tare", tareEvent)
+		}
 	}, [socket])
 
 	// useEffect((): any => {
-	// 	const handleMessage = ({ msg, status }: SerialMessage) => {
-	// 		setIsTaring(false)
-	// 		setAction("loaded")
-	// 		handleAlert(msg, status)
+	// 	const handleEndProcess = () => {
+	// 		setAction("done")
+	// 		handleAlert("Processo finalizado", "info")
 	// 	}
-	// 	socket.on("message", handleMessage)
-	// 	return () => socket.off("message", handleMessage)
+	// 	socket.on("end", handleEndProcess)
+	// 	return () => socket.off("end", handleEndProcess)
 	// }, [socket])
-
-	useEffect((): any => {
-		const handleEndProcess = () => {
-			setAction("done")
-			handleAlert("Processo finalizado", "info")
-		}
-		socket.on("end", handleEndProcess)
-		return () => socket.off("end", handleEndProcess)
-	}, [socket])
 
 	const handleCalibrate = () => {
 		setIsTaring(true)
-		socket.emit("reconect-arduino")
+		socket.emit("connect-arduino")
 	}
 
 	const handleStart = () => {
