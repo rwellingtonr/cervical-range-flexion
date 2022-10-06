@@ -18,7 +18,7 @@ export default function InputDate({ handleAction, name, label }: Props) {
 				m: 1,
 				borderRadius: "20px",
 				width: 250,
-				background: "rgba(143, 218, 200, 0.2)",
+				background: "#8fdac833",
 				"& .MuiOutlinedInput-root": { borderRadius: "20px" },
 			}}
 			InputLabelProps={{
