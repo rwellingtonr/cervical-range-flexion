@@ -85,7 +85,7 @@ export default function FloatingActionButtonZoom() {
 							color: "#8fdac8",
 						},
 						"& .css-1ujykiq-MuiButtonBase-root-MuiTab-root.Mui-selected": {
-							background: "rgba(143, 218, 200, 0.2)",
+							background: "#8fdac833",
 							color: "#08542c",
 						},
 						"& .css-1aquho2-MuiTabs-indicator": {

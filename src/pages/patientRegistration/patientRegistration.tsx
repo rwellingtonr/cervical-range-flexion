@@ -22,7 +22,7 @@ type Patient = {
 const inputStyle = {
 	m: 1,
 	borderRadius: "20px",
-	background: "rgba(143, 218, 200, 0.2)",
+	background: "#8fdac833",
 }
 
 const genders = ["masculino", "feminino", "outro"]
