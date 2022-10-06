@@ -1,20 +1,24 @@
 import React, { useEffect, useState, useCallback } from "react"
+import { socket } from "../../service/websocket"
+import { usePatient } from "../../context/patient"
+import { useNavigate } from "react-router-dom"
+import { useAlert } from "../../context/alert"
 import AreaDisplayChart from "../charts/areaDisplayChart"
 import ProgressCircle from "../circularProgress"
 import Box from "@mui/material/Box"
 import style from "./realTime.module.scss"
-import { socket } from "../../service/websocket"
-import { usePatient } from "../../context/patient"
-import { useNavigate } from "react-router-dom"
-import OpenIconSpeedDial from "../speedDial/speedDial"
-import { useAlert } from "../../context/alert"
 import CustomizedSnackbars from "../alert/alert"
+import RealTimeButtonActions from "../realtimeActions"
+import { counter } from "../../utils/counter"
+import { connected, disconnected } from "./indicator"
 
 type Measure = {
 	times: number
 	score: number
 }
 type ActionsToTake = "disconnected" | "loaded" | "done"
+
+type Movement = "flexion" | "lateral-let" | "lateral-right"
 
 export type ActionsToDo = "return" | "start" | "save" | "cancel" | "reconnect"
 
@@ -23,22 +27,6 @@ type SerialMessage = {
 	status: string
 }
 
-const counter = (() => {
-	let i = 0
-
-	function reset() {
-		return (i = 0)
-	}
-
-	function increment() {
-		return i++
-	}
-
-	return {
-		reset,
-		increment,
-	}
-})()
 export default function RealTime() {
 	const { patient } = usePatient()
 	const navigate = useNavigate()
@@ -56,37 +44,6 @@ export default function RealTime() {
 		console.log("Aqui!")
 		socket.emit("status")
 	}, [])
-	// useEffect((): any => {
-	// 	const handleStatus = (payload: { status: ActionsToTake }) => {
-	// 		setAction(payload.status)
-	// 	}
-	// 	socket.on("status", handleStatus)
-	// 	return () => socket.off("status", handleStatus)
-	// }, [socket])
-
-	// useEffect((): any => {
-	// 	const tareEvent = () => {
-	// 		console.warn("backTare")
-	// 		counter.reset()
-	// 		setIsTaring(false)
-	// 		setAction("loaded")
-	// 	}
-	// 	socket.on("tare", tareEvent)
-	// 	return () => socket.off("tare", tareEvent)
-	// }, [socket])
-
-	// useEffect((): any => {
-	// 	const measurementEvent = ({ score }: Measure) => {
-	// 		const dataToPush: Measure = {
-	// 			score,
-	// 			times: counter.increment(),
-	// 		}
-	// 		setData(prev => [...prev, dataToPush])
-	// 	}
-
-	// 	socket.on("measurement", measurementEvent)
-	// 	return () => socket.off("measurement", measurementEvent)
-	// }, [socket])
 
 	useEffect((): any => {
 		const handleMessage = ({ msg, status }: SerialMessage) => {
@@ -105,7 +62,7 @@ export default function RealTime() {
 			setAction(payload.status)
 		}
 		const tareEvent = () => {
-			console.warn("backTare")
+			console.warn("Finalizou")
 			counter.reset()
 			setIsTaring(false)
 			setAction("loaded")
@@ -123,29 +80,20 @@ export default function RealTime() {
 		}
 	}, [socket])
 
-	// useEffect((): any => {
-	// 	const handleEndProcess = () => {
-	// 		setAction("done")
-	// 		handleAlert("Processo finalizado", "info")
-	// 	}
-	// 	socket.on("end", handleEndProcess)
-	// 	return () => socket.off("end", handleEndProcess)
-	// }, [socket])
-
 	const handleCalibrate = () => {
 		setIsTaring(true)
 		socket.emit("connect-arduino")
 	}
 
-	const handleStart = () => {
+	const handleStart = (movement: Movement) => {
 		const crefito = localStorage.getItem("@tcc:crefito")
 		const patientId = patient?.id as string
-		socket.emit("start", { patientId, crefito })
+		socket.emit("start", { patientId, crefito, movement })
 	}
 
 	const actions = {
 		return: () => navigateToMeasurement(),
-		start: () => handleStart(),
+		start: () => handleStart("flexion"),
 		save: () => socket.emit("save"),
 		cancel: () => socket.emit("abort"),
 		reconnect: () => handleCalibrate(),
@@ -184,17 +132,14 @@ export default function RealTime() {
 						<ProgressCircle style={{ padding: "0 20px" }} />
 					) : (
 						<div className={style.actionsWrapper}>
-							<OpenIconSpeedDial status={action} handleAction={handleAction} />
-							<>
+							<RealTimeButtonActions status={action} handleAction={handleAction} />
+							<div className={style.indicatorWrapper}>
 								<span
-									style={{
-										backgroundColor:
-											action === "disconnected" ? "#bbb" : "#8fdac8",
-									}}
+									style={action === "disconnected" ? disconnected : connected}
 									className={style.dot}
 								/>
 								<p>{action === "disconnected" ? "Desconectado" : "Ligado"}</p>
-							</>
+							</div>
 						</div>
 					)}
 				</div>
