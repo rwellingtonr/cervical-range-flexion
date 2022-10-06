@@ -11,6 +11,7 @@ import CustomizedSnackbars from "../alert/alert"
 import RealTimeButtonActions from "../realtimeActions"
 import { counter } from "../../utils/counter"
 import { connected, disconnected } from "./indicator"
+import AlertDialogSlide from "../measurementMovements"
 
 type Measure = {
 	times: number
@@ -28,12 +29,15 @@ type SerialMessage = {
 }
 
 export default function RealTime() {
-	const { patient } = usePatient()
 	const navigate = useNavigate()
+
+	const { patient } = usePatient()
+	const { handleAlert } = useAlert()
+
 	const [isTaring, setIsTaring] = useState<boolean>(false)
+	const [openDialog, setOpenDialog] = useState<boolean>(false)
 	const [action, setAction] = useState<ActionsToTake>("disconnected")
 	const [data, setData] = useState<Measure[]>([])
-	const { handleAlert } = useAlert()
 
 	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
 	useEffect(() => {
@@ -85,15 +89,9 @@ export default function RealTime() {
 		socket.emit("connect-arduino")
 	}
 
-	const handleStart = (movement: Movement) => {
-		const crefito = localStorage.getItem("@tcc:crefito")
-		const patientId = patient?.id as string
-		socket.emit("start", { patientId, crefito, movement })
-	}
-
 	const actions = {
 		return: () => navigateToMeasurement(),
-		start: () => handleStart("flexion"),
+		start: () => handleStart(),
 		save: () => socket.emit("save"),
 		cancel: () => socket.emit("abort"),
 		reconnect: () => handleCalibrate(),
@@ -110,10 +108,20 @@ export default function RealTime() {
 		}
 		return new Date().toLocaleDateString("pt-BR")
 	}
+	const handleStart = () => {
+		setOpenDialog(true)
+		// const crefito = localStorage.getItem("@tcc:crefito")
+		// const patientId = patient?.id as string
+		// socket.emit("start", { patientId, crefito, movement })
+	}
+	function handleCloseDialog() {
+		setOpenDialog(false)
+	}
 
 	return (
 		<div>
 			<CustomizedSnackbars />
+			<AlertDialogSlide handleClose={handleCloseDialog} open={openDialog} />
 			<AreaDisplayChart dataValues={data} xAxis={"times"} areaValue={"score"} />
 			<Box className={style.boxWrapper}>
 				<div className={style.displayInfo}>

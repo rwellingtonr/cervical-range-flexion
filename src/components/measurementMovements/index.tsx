@@ -1,38 +1,61 @@
 import * as React from "react"
 import Button from "@mui/material/Button"
+import Box from "@mui/material/Box"
 import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
 import DialogTitle from "@mui/material/DialogTitle"
 import Slide from "@mui/material/Slide"
+import CancelIcon from "@mui/icons-material/Cancel"
+import SendIcon from "@mui/icons-material/Send"
+import Autocomplete from "@mui/material/Autocomplete"
+import TextField from "@mui/material/TextField"
 import { TransitionProps } from "@mui/material/transitions"
+import CircularProgress from "@mui/material/CircularProgress"
+
+type AlertDialogSlideProps = {
+	open: boolean
+	handleClose: () => void
+}
+interface ITransitionPros extends TransitionProps {
+	children: React.ReactElement
+}
+interface FilmOptionType {
+	label: string
+	year: number
+}
 
 const Transition = React.forwardRef(function Transition(
-	props: TransitionProps & {
-		children: React.ReactElement<any, any>
-	},
+	props: ITransitionPros,
 	ref: React.Ref<unknown>
 ) {
 	return <Slide direction="up" ref={ref} {...props} />
 })
+const top100Films = [
+	{ label: "The Shawshank Redemption", year: 1994 },
+	{ label: "The Godfather", year: 1972 },
+	{ label: "The Godfather: Part II", year: 1974 },
+]
 
-export default function AlertDialogSlide() {
-	const [open, setOpen] = React.useState(false)
+function sleep(delay = 0) {
+	return new Promise(resolve => {
+		setTimeout(resolve, delay)
+	})
+}
 
-	const handleClickOpen = () => {
-		setOpen(true)
+export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlideProps) {
+	const defaultProps = {
+		options: top100Films,
+		getOptionLabel: (option: FilmOptionType) => option.label,
 	}
-
-	const handleClose = () => {
-		setOpen(false)
+	const flatProps = {
+		options: top100Films.map(option => option.label),
 	}
+	const [value, setValue] = React.useState<FilmOptionType | null>(null)
 
 	return (
-		<div>
-			<Button variant="outlined" onClick={handleClickOpen}>
-				Slide in alert dialog
-			</Button>
+		<Box component={"div"}>
 			<Dialog
 				open={open}
 				TransitionComponent={Transition}
@@ -40,18 +63,28 @@ export default function AlertDialogSlide() {
 				onClose={handleClose}
 				aria-describedby="alert-dialog-slide-description"
 			>
-				<DialogTitle>{"Use Google's location service?"}</DialogTitle>
+				<DialogTitle>Selecione o movimento à ser realizado</DialogTitle>
 				<DialogContent>
+					<Autocomplete
+						{...flatProps}
+						id="flat-demo"
+						renderInput={params => (
+							<TextField {...params} label="flat" variant="standard" />
+						)}
+					/>
 					<DialogContentText id="alert-dialog-slide-description">
-						Let Google help apps determine location. This means sending anonymous
-						location data to Google, even when no apps are running.
+						Aqui vai o GIF
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose}>Disagree</Button>
-					<Button onClick={handleClose}>Agree</Button>
+					<Button color="error" startIcon={<CancelIcon />} onClick={handleClose}>
+						Cancelar
+					</Button>
+					<Button color="success" startIcon={<SendIcon />} onClick={handleClose}>
+						Iniciar
+					</Button>
 				</DialogActions>
 			</Dialog>
-		</div>
+		</Box>
 	)
 }

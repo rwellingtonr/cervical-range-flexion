@@ -24,7 +24,7 @@ export default function RealTimeButtonActions({ status, handleAction }: SpeedDia
 						startIcon={item.icon}
 						onClick={() => handleAction(item.action as ActionsToDo)}
 					>
-						{item.action}
+						{item.name}
 					</Button>
 				))}
 			</Stack>
