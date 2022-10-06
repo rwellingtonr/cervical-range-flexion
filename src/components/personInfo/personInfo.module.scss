@@ -1,35 +1,35 @@
 .personWrapper {
-    padding: 1rem;
-    margin: 1rem;
+	padding: 1rem;
+	margin: 1rem;
 
-    border-radius: 20px;
-    width: 400px;
-    background: rgba(143, 218, 200, 0.2);
-    box-shadow: 2px 3px 3px #8fdac9;
+	border-radius: 20px;
+	width: 400px;
+	background: #8fdac833;
+	box-shadow: 2px 3px 3px #8fdac9;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-    .name {
-        padding: 10px 0;
-        text-align: center;
-    }
-    .tableInLine {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+	.name {
+		padding: 10px 0;
+		text-align: center;
+	}
+	.tableInLine {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 
-        padding: 10px 0;
-        width: inherit;
-    }
+		padding: 10px 0;
+		width: inherit;
+	}
 }
 
 .bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
 
-    padding: 10px 0;
-    width: 400px;
+	padding: 10px 0;
+	width: 400px;
 }
