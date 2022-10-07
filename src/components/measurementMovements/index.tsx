@@ -12,7 +12,6 @@ import SendIcon from "@mui/icons-material/Send"
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 import { TransitionProps } from "@mui/material/transitions"
-import CircularProgress from "@mui/material/CircularProgress"
 
 type AlertDialogSlideProps = {
 	open: boolean
@@ -21,39 +20,27 @@ type AlertDialogSlideProps = {
 interface ITransitionPros extends TransitionProps {
 	children: React.ReactElement
 }
-interface FilmOptionType {
+type Movement = "flexion" | "lateral-let" | "lateral-right"
+interface CervicalMovement {
 	label: string
-	year: number
+	movement: Movement
 }
 
-const Transition = React.forwardRef(function Transition(
-	props: ITransitionPros,
-	ref: React.Ref<unknown>
-) {
-	return <Slide direction="up" ref={ref} {...props} />
-})
-const top100Films = [
-	{ label: "The Shawshank Redemption", year: 1994 },
-	{ label: "The Godfather", year: 1972 },
-	{ label: "The Godfather: Part II", year: 1974 },
+function TransitionRef(props: ITransitionPros, ref: React.Ref<unknown>) {
+	const newProps = { ...props, timeout: 650 }
+	return <Slide direction="up" ref={ref} {...newProps} />
+}
+const Transition = React.forwardRef(TransitionRef)
+
+const cervicalMovement: CervicalMovement[] = [
+	{ label: "Flexão", movement: "flexion" },
+	{ label: "Flexão lateral esquerda", movement: "lateral-let" },
+	{ label: "Flexão lateral direita", movement: "lateral-right" },
 ]
-
-function sleep(delay = 0) {
-	return new Promise(resolve => {
-		setTimeout(resolve, delay)
-	})
+const flatProps = {
+	options: cervicalMovement.map(option => option.label),
 }
-
 export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlideProps) {
-	const defaultProps = {
-		options: top100Films,
-		getOptionLabel: (option: FilmOptionType) => option.label,
-	}
-	const flatProps = {
-		options: top100Films.map(option => option.label),
-	}
-	const [value, setValue] = React.useState<FilmOptionType | null>(null)
-
 	return (
 		<Box component={"div"}>
 			<Dialog
@@ -69,7 +56,12 @@ export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlide
 						{...flatProps}
 						id="flat-demo"
 						renderInput={params => (
-							<TextField {...params} label="flat" variant="standard" />
+							<TextField
+								{...params}
+								label="Movimento"
+								placeholder="Selecione o movimento a ser realizado"
+								variant="standard"
+							/>
 						)}
 					/>
 					<DialogContentText id="alert-dialog-slide-description">

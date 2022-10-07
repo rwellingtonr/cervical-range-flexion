@@ -19,8 +19,6 @@ type Measure = {
 }
 type ActionsToTake = "disconnected" | "loaded" | "done"
 
-type Movement = "flexion" | "lateral-let" | "lateral-right"
-
 export type ActionsToDo = "return" | "start" | "save" | "cancel" | "reconnect"
 
 type SerialMessage = {
@@ -122,7 +120,9 @@ export default function RealTime() {
 		<div>
 			<CustomizedSnackbars />
 			<AlertDialogSlide handleClose={handleCloseDialog} open={openDialog} />
-			<AreaDisplayChart dataValues={data} xAxis={"times"} areaValue={"score"} />
+			<div style={action === "disconnected" ? { visibility: "hidden", height: "200px" } : {}}>
+				<AreaDisplayChart dataValues={data} xAxis={"times"} areaValue={"score"} />
+			</div>
 			<Box className={style.boxWrapper}>
 				<div className={style.displayInfo}>
 					<h2 className={style.tableHeader}>{patient?.name}</h2>
