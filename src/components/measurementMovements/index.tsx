@@ -78,12 +78,16 @@ export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlide
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button color="error" startIcon={<CancelIcon />} onClick={handleClose}>
-						Cancelar
-					</Button>
-					<Button color="success" startIcon={<SendIcon />} onClick={handleClose}>
-						Iniciar
-					</Button>
+					{!!movementSelected && (
+						<Button color="error" startIcon={<CancelIcon />} onClick={handleClose}>
+							Cancelar
+						</Button>
+					)}
+					{!!movementSelected && (
+						<Button color="success" startIcon={<SendIcon />} onClick={handleClose}>
+							Iniciar
+						</Button>
+					)}
 				</DialogActions>
 			</Dialog>
 		</Box>
