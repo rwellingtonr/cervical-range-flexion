@@ -12,6 +12,7 @@ import SendIcon from "@mui/icons-material/Send"
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 import { TransitionProps } from "@mui/material/transitions"
+import CervicalCardMedia from "./cervicalCardMedia"
 
 type AlertDialogSlideProps = {
 	open: boolean
@@ -20,7 +21,7 @@ type AlertDialogSlideProps = {
 interface ITransitionPros extends TransitionProps {
 	children: React.ReactElement
 }
-type Movement = "flexion" | "lateral-let" | "lateral-right"
+export type Movement = "flexion" | "lateral-left" | "lateral-right"
 interface CervicalMovement {
 	label: string
 	movement: Movement
@@ -34,13 +35,17 @@ const Transition = React.forwardRef(TransitionRef)
 
 const cervicalMovement: CervicalMovement[] = [
 	{ label: "Flexão", movement: "flexion" },
-	{ label: "Flexão lateral esquerda", movement: "lateral-let" },
+	{ label: "Flexão lateral esquerda", movement: "lateral-left" },
 	{ label: "Flexão lateral direita", movement: "lateral-right" },
 ]
 const flatProps = {
 	options: cervicalMovement.map(option => option.label),
 }
 export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlideProps) {
+	const [label, setLabel] = React.useState<string>("")
+
+	const movementSelected = label ? cervicalMovement.find(item => item.label === label) : null
+
 	return (
 		<Box component={"div"}>
 			<Dialog
@@ -55,6 +60,8 @@ export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlide
 					<Autocomplete
 						{...flatProps}
 						id="flat-demo"
+						defaultChecked={false}
+						onInputChange={(_, newInputValue) => setLabel(newInputValue)}
 						renderInput={params => (
 							<TextField
 								{...params}
@@ -65,7 +72,9 @@ export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlide
 						)}
 					/>
 					<DialogContentText id="alert-dialog-slide-description">
-						Aqui vai o GIF
+						{!!movementSelected && (
+							<CervicalCardMedia movement={movementSelected.movement} />
+						)}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
