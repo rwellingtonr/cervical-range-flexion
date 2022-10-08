@@ -1,37 +1,28 @@
 import * as React from "react"
 import Button from "@mui/material/Button"
-import Box from "@mui/material/Box"
-import Dialog from "@mui/material/Dialog"
 import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import DialogContentText from "@mui/material/DialogContentText"
-import DialogTitle from "@mui/material/DialogTitle"
-import Slide from "@mui/material/Slide"
 import CancelIcon from "@mui/icons-material/Cancel"
 import SendIcon from "@mui/icons-material/Send"
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
-import { TransitionProps } from "@mui/material/transitions"
 import CervicalCardMedia from "./cervicalCardMedia"
+import { socket } from "../../service/websocket"
+import { usePatient } from "../../context/patient"
+import DialogSlide from "../dialog/dialogSlide"
 
 type AlertDialogSlideProps = {
 	open: boolean
 	handleClose: () => void
+	handleMeasure: (movement: string) => void
 }
-interface ITransitionPros extends TransitionProps {
-	children: React.ReactElement
-}
+
 export type Movement = "flexion" | "lateral-left" | "lateral-right"
 interface CervicalMovement {
 	label: string
 	movement: Movement
 }
-
-function TransitionRef(props: ITransitionPros, ref: React.Ref<unknown>) {
-	const newProps = { ...props, timeout: 650 }
-	return <Slide direction="up" ref={ref} {...newProps} />
-}
-const Transition = React.forwardRef(TransitionRef)
 
 const cervicalMovement: CervicalMovement[] = [
 	{ label: "Flexão", movement: "flexion" },
@@ -41,55 +32,72 @@ const cervicalMovement: CervicalMovement[] = [
 const flatProps = {
 	options: cervicalMovement.map(option => option.label),
 }
-export default function AlertDialogSlide({ open, handleClose }: AlertDialogSlideProps) {
+
+export default function AlertDialogSlide({
+	open,
+	handleClose,
+	handleMeasure,
+}: AlertDialogSlideProps) {
 	const [label, setLabel] = React.useState<string>("")
+	const { patient } = usePatient()
 
 	const movementSelected = label ? cervicalMovement.find(item => item.label === label) : null
 
+	const startMovement = () => {
+		console.log(`Movimento ${movementSelected?.movement} ${patient?.id}`)
+		if (movementSelected) {
+			const crefito = localStorage.getItem("@tcc:crefito")
+			socket.emit("start", {
+				patientId: patient?.id,
+				crefito,
+				movement: movementSelected?.movement,
+			})
+			handleMeasure(movementSelected?.label)
+		}
+		handleClose()
+	}
+
+	const dialogProps = {
+		title: "Selecione o movimento à ser realizado",
+		handleClose,
+		open,
+	}
 	return (
-		<Box component={"div"}>
-			<Dialog
-				open={open}
-				TransitionComponent={Transition}
-				keepMounted
-				onClose={handleClose}
-				aria-describedby="alert-dialog-slide-description"
-			>
-				<DialogTitle>Selecione o movimento à ser realizado</DialogTitle>
-				<DialogContent>
-					<Autocomplete
-						{...flatProps}
-						id="flat-demo"
-						defaultChecked={false}
-						onInputChange={(_, newInputValue) => setLabel(newInputValue)}
-						renderInput={params => (
-							<TextField
-								{...params}
-								label="Movimento"
-								placeholder="Selecione o movimento a ser realizado"
-								variant="standard"
-							/>
-						)}
-					/>
-					<DialogContentText id="alert-dialog-slide-description">
-						{!!movementSelected && (
-							<CervicalCardMedia movement={movementSelected.movement} />
-						)}
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					{!!movementSelected && (
-						<Button color="error" startIcon={<CancelIcon />} onClick={handleClose}>
-							Cancelar
-						</Button>
+		<DialogSlide {...dialogProps}>
+			<DialogContent>
+				<Autocomplete
+					{...flatProps}
+					id="flat-demo"
+					defaultChecked={false}
+					defaultValue=""
+					onInputChange={(_, newInputValue) => setLabel(newInputValue)}
+					renderInput={params => (
+						<TextField
+							{...params}
+							label="Movimento"
+							placeholder="Selecione o movimento a ser realizado"
+							variant="standard"
+						/>
 					)}
+				/>
+				<DialogContentText id="alert-dialog-slide-description">
 					{!!movementSelected && (
-						<Button color="success" startIcon={<SendIcon />} onClick={handleClose}>
-							Iniciar
-						</Button>
+						<CervicalCardMedia movement={movementSelected.movement} />
 					)}
-				</DialogActions>
-			</Dialog>
-		</Box>
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				{!!movementSelected && (
+					<Button color="error" startIcon={<CancelIcon />} onClick={handleClose}>
+						Cancelar
+					</Button>
+				)}
+				{!!movementSelected && (
+					<Button color="success" startIcon={<SendIcon />} onClick={startMovement}>
+						Iniciar
+					</Button>
+				)}
+			</DialogActions>
+		</DialogSlide>
 	)
 }
