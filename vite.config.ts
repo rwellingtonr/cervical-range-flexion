@@ -1,11 +1,10 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 
-import { defineConfig } from "vite/"
+import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import ViteFonts from "vite-plugin-fonts"
 import type { UserConfig as VitestUserConfigInterface } from "vitest/config"
-import "dotenv/config"
 
 const vitestConfig: VitestUserConfigInterface = {
 	test: {
