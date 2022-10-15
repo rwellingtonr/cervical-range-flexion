@@ -4,15 +4,6 @@ import { usePatient } from "../../context/patient"
 import DefaultButton from "../defaultButton.ts/defaultButton"
 import style from "./personInfo.module.scss"
 
-type Patient = {
-	id: string
-	name: string
-	cpf: string
-	gender: string
-	birthday: Date
-	surgery_date: Date
-}
-
 export default function PersonInfo() {
 	const { patient } = usePatient()
 	const formatDate = (date: Date) => {

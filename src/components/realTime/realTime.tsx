@@ -11,8 +11,9 @@ import CustomizedSnackbars from "../alert/alert"
 import RealTimeButtonActions from "../realtimeActions"
 import { counter } from "../../utils/counter"
 import { connected, disconnected } from "./indicator"
-import AlertDialogSlide, { Movement } from "../measurementMovements"
+import AlertDialogSlide from "../measurementMovements"
 import MeasurementCompleted from "../measurementCompleted"
+import { Movement } from "../../interface/movement"
 
 type Measure = {
 	times: number

@@ -11,6 +11,7 @@ import CervicalCardMedia from "./cervicalCardMedia"
 import { socket } from "../../service/websocket"
 import { usePatient } from "../../context/patient"
 import DialogSlide from "../dialog/dialogSlide"
+import { Movement } from "../../interface/movement"
 
 type AlertDialogSlideProps = {
 	open: boolean
@@ -18,7 +19,6 @@ type AlertDialogSlideProps = {
 	handleMeasure: (movement: string) => void
 }
 
-export type Movement = "flexion" | "lateral-left" | "lateral-right"
 interface CervicalMovement {
 	label: string
 	movement: Movement
