@@ -9,7 +9,7 @@ import Collapse from "@mui/material/Collapse"
 import lateralLeft from "../../assets/Lateral esquerda.png"
 import lateralRight from "../../assets/Lateral direita.png"
 import flexion from "../../assets/flexão.png"
-import { Movement } from "."
+import { Movement } from "../../interface/movement"
 
 type CervicalCardMediaProps = {
 	movement: Movement
