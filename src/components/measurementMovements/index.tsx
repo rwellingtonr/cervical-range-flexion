@@ -69,7 +69,6 @@ export default function AlertDialogSlide({
 					{...flatProps}
 					id="flat-demo"
 					defaultChecked={false}
-					defaultValue=""
 					onInputChange={(_, newInputValue) => setLabel(newInputValue)}
 					renderInput={params => (
 						<TextField
