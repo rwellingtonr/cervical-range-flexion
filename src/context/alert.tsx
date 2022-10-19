@@ -14,7 +14,7 @@ type ErrorType = {
 	message: string
 	severity: Severity
 }
-type Severity = "error" | "info" | "success" | "warning"
+export type Severity = "error" | "info" | "success" | "warning"
 
 const AlertContext = createContext({} as AlertContextValue)
 
