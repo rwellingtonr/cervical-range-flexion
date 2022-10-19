@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react"
-import { socket } from "../../service/websocket"
-import { usePatient } from "../../context/patient"
-import { useNavigate } from "react-router-dom"
-import { useAlert } from "../../context/alert"
 import AreaDisplayChart from "../charts/areaDisplayChart"
 import ProgressCircle from "../circularProgress"
 import Box from "@mui/material/Box"
 import style from "./realTime.module.scss"
 import CustomizedSnackbars from "../alert/alert"
-import RealTimeButtonActions from "../realtimeActions"
-import { counter } from "../../utils/counter"
-import { connected, disconnected } from "./indicator"
 import AlertDialogSlide from "../measurementMovements"
 import MeasurementCompleted from "../measurementCompleted"
-import { Movement } from "../../interface/movement"
+import RealTimeButtonActions from "../realtimeActions"
+import { socket } from "../../service/websocket"
+import { usePatient } from "../../context/patient"
+import { useNavigate } from "react-router-dom"
+import { type Severity, useAlert } from "../../context/alert"
+import { counter } from "../../utils/counter"
+import { connected, disconnected } from "./indicator"
+import type { Movement } from "../../interface/movement"
 
 type Measure = {
 	times: number
@@ -25,7 +25,7 @@ export type ActionsToDo = "return" | "start" | "save" | "cancel" | "completed" |
 
 type SerialMessage = {
 	msg: string
-	status: string
+	status: Severity
 }
 export type PatientMeasurement = {
 	maxScore: number
@@ -53,9 +53,25 @@ export default function RealTime() {
 	}, [navigateToMeasurement])
 
 	useEffect(() => {
-		console.log("Aqui!")
 		socket.emit("status")
 	}, [])
+
+	useEffect(() => {
+		const errorTaring = (taring: boolean) => {
+			if (taring) {
+				setIsTaring(false)
+				setAction("disconnected")
+				socket.emit("disconnect-arduino")
+			}
+		}
+		if (isTaring) {
+			const ms = 10 * 1000 //10s
+			const timeout = setTimeout(() => {
+				errorTaring(isTaring)
+			}, ms)
+			return () => clearTimeout(timeout)
+		}
+	}, [isTaring])
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	useEffect((): any => {
@@ -139,7 +155,7 @@ export default function RealTime() {
 		setPatientMeasurement(null)
 	}
 
-	return (
+	return patient ? (
 		<div>
 			<CustomizedSnackbars />
 			<AlertDialogSlide
@@ -186,5 +202,7 @@ export default function RealTime() {
 				</div>
 			</Box>
 		</div>
+	) : (
+		<div></div>
 	)
 }
