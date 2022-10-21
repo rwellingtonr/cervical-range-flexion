@@ -7,7 +7,7 @@ import style from "./sign.module.scss"
 import InputPassword from "./inputPassword"
 import SignInButton from "./buttonModal/signInButton"
 import CustomizedSnackbars from "../alert/alert"
-import { useAlert } from "../../context/alert"
+import { Severity, useAlert } from "../../context/alert"
 
 type SignInProps = {
 	validateCrefito: (crefito: string) => boolean
@@ -33,7 +33,7 @@ export default function SignIn({ validateCrefito }: SignInProps) {
 			handleError("Error ao tentar fazer o logIn")
 		}
 	}
-	function handleError(msg: string, type?: string) {
+	function handleError(msg: string, type?: Severity) {
 		setCrefito("")
 		setPassword("")
 		handleAlert(msg, type)
