@@ -1,5 +1,4 @@
 import React from "react"
-import SaveIcon from "@mui/icons-material/Save"
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn"
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import CancelIcon from "@mui/icons-material/Cancel"
@@ -18,11 +17,6 @@ const actionsLoaded = [
 
 const ongoing = [
 	{ icon: <DoneAllIcon />, name: "Finalizar", action: "completed" },
-	{ icon: <CancelIcon />, name: "Cancelar", action: "abort" },
-]
-
-const actionsWhenDone = [
-	{ icon: <SaveIcon />, name: "Salvar", action: "save" },
 	{ icon: <CancelIcon />, name: "Cancelar", action: "cancel" },
 ]
 

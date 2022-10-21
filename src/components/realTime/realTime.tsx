@@ -1,18 +1,20 @@
 import React, { useEffect, useState, useCallback } from "react"
-import { socket } from "../../service/websocket"
-import { usePatient } from "../../context/patient"
-import { useNavigate } from "react-router-dom"
-import { useAlert } from "../../context/alert"
 import AreaDisplayChart from "../charts/areaDisplayChart"
 import ProgressCircle from "../circularProgress"
 import Box from "@mui/material/Box"
 import style from "./realTime.module.scss"
 import CustomizedSnackbars from "../alert/alert"
+import AlertDialogSlide from "../measurementMovements"
+import MeasurementCompleted from "../measurementCompleted"
 import RealTimeButtonActions from "../realtimeActions"
+import { socket } from "../../service/websocket"
+import { usePatient } from "../../context/patient"
+import { useNavigate } from "react-router-dom"
+import { type Severity, useAlert } from "../../context/alert"
 import { counter } from "../../utils/counter"
 import { connected, disconnected } from "./indicator"
-import AlertDialogSlide, { Movement } from "../measurementMovements"
-import MeasurementCompleted from "../measurementCompleted"
+import type { Movement } from "../../interface/movement"
+import ErrorSnackbar from "../serialPortError/errorSnackbar"
 
 type Measure = {
 	times: number
@@ -20,11 +22,11 @@ type Measure = {
 }
 export type ActionsToTake = "disconnected" | "loaded" | "ongoing"
 
-export type ActionsToDo = "return" | "start" | "save" | "cancel" | "completed" | "connect"
+export type ActionsToDo = "return" | "start" | "cancel" | "completed" | "connect"
 
 type SerialMessage = {
 	msg: string
-	status: string
+	status: Severity
 }
 export type PatientMeasurement = {
 	maxScore: number
@@ -45,6 +47,7 @@ export default function RealTime() {
 	const [data, setData] = useState<Measure[]>([])
 	const [movement, setMovement] = useState<string>("")
 	const [patientMeasurement, setPatientMeasurement] = useState<PatientMeasurement | null>(null)
+	const [errorConnecting, setErrorConnecting] = useState<boolean>(false)
 
 	const navigateToMeasurement = useCallback(() => navigate("/measurement"), [])
 	useEffect(() => {
@@ -52,15 +55,37 @@ export default function RealTime() {
 	}, [navigateToMeasurement])
 
 	useEffect(() => {
-		console.log("Aqui!")
-		socket.emit("status")
+		if (patient) {
+			socket.emit("status")
+		}
 	}, [])
+
+	useEffect(() => {
+		const errorTaring = (taring: boolean) => {
+			if (taring) {
+				setIsTaring(false)
+				setAction("disconnected")
+				setErrorConnecting(true)
+				socket.emit("disconnect-arduino")
+			}
+		}
+		if (isTaring) {
+			const ms = 10 * 1000 //10s
+			const timeout = setTimeout(() => {
+				errorTaring(isTaring)
+			}, ms)
+			return () => clearTimeout(timeout)
+		}
+	}, [isTaring])
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	useEffect((): any => {
 		const handleMessage = ({ msg, status }: SerialMessage) => {
 			console.log(`Passou aqui, message: ${msg}`)
-			if (status === "error") setIsTaring(false)
+			if (status === "error") {
+				setIsTaring(false)
+				setAction("disconnected")
+			}
 			handleAlert(msg, status)
 		}
 		const measurementEvent = ({ score }: Measure) => {
@@ -104,10 +129,9 @@ export default function RealTime() {
 	}
 
 	const actions = {
-		cancel: () => socket.emit("abort"),
+		cancel: () => handleAbortProcess(),
 		return: () => navigateToMeasurement(),
 		connect: () => connectArduino(),
-		save: () => socket.emit("save"),
 		start: () => handleStart(),
 		completed: () => socket.emit("end-process"),
 	}
@@ -133,24 +157,46 @@ export default function RealTime() {
 		setAction("ongoing")
 		setMovement(movement)
 	}
-
-	const closeMeasureResult = () => {
-		setPatientMeasurement(null)
+	const handleAbortProcess = () => {
+		socket.emit("abort-process")
+		setAction("loaded")
+		resetData()
 	}
 
-	return (
+	const resetData = () => {
+		setData([])
+		setPatientMeasurement(null)
+		counter.reset()
+	}
+
+	const closeMeasureResult = () => {
+		resetData()
+		handleAlert("Dados foram limpos", "info")
+	}
+	const handleCloseErrorSnackbar = () => {
+		setErrorConnecting(false)
+	}
+
+	return patient ? (
 		<div>
 			<CustomizedSnackbars />
-			<AlertDialogSlide
-				handleClose={handleCloseDialog}
-				open={openDialog}
-				handleMeasure={handleMeasure}
-			/>
-			<MeasurementCompleted
-				open={!!patientMeasurement}
-				handleClose={closeMeasureResult}
-				patientMeasurement={patientMeasurement}
-			/>
+			{openDialog && (
+				<AlertDialogSlide
+					handleClose={handleCloseDialog}
+					open={openDialog}
+					handleMeasure={handleMeasure}
+				/>
+			)}
+			{!!patientMeasurement && (
+				<MeasurementCompleted
+					open={!!patientMeasurement}
+					handleClose={closeMeasureResult}
+					patientMeasurement={patientMeasurement}
+				/>
+			)}
+			{errorConnecting && (
+				<ErrorSnackbar handleClose={handleCloseErrorSnackbar} open={errorConnecting} />
+			)}
 			<div style={movement ? {} : { visibility: "hidden", height: "200px" }}>
 				<h2 style={{ textAlign: "center" }}>Movimento: {movement}</h2>
 				<AreaDisplayChart dataValues={data} xAxis={"times"} areaValue={"score"} />
@@ -185,5 +231,7 @@ export default function RealTime() {
 				</div>
 			</Box>
 		</div>
+	) : (
+		<div></div>
 	)
 }

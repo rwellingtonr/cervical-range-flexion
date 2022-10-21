@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import DefaultButton from "../../components/defaultButton.ts/defaultButton"
 import Person from "@mui/icons-material/Person"
 import InputDate from "../../components/inputDate/inputDate"
 import style from "./historySelect.module.scss"
-import SelectPatient from "../stackSelect/selectPatient"
+import SelectPatient from "../select/selectPatient"
 import { usePatient } from "../../context/patient"
+import SelectMovement from "../select/selectMovement"
+import { useAlert } from "../../context/alert"
+import CustomizedSnackbars from "../alert/alert"
+import { Movement } from "../../interface/movement"
 
 type Dates = {
 	initialDate: Date
@@ -13,8 +17,11 @@ type Dates = {
 }
 
 export default function HistorySelect() {
+	const navigate = useNavigate()
 	const { patient, setPatient } = usePatient()
+	const { handleAlert } = useAlert()
 	const [dates, setDates] = useState({} as Dates)
+	const [movement, setMovement] = useState<Movement>()
 
 	useEffect(() => setPatient(null), [])
 
@@ -29,11 +36,20 @@ export default function HistorySelect() {
 			setDates({ ...dates, endDate: dateIso })
 		}
 	}
+	const handleClick = () => {
+		if (movement) {
+			const queryDate = `startDate=${dates.initialDate}&endDate=${dates.endDate}`
+			const queryMovement = `movement=${movement}`
+			return navigate(`/patientHistory/${patient?.id}?${queryDate}&${queryMovement}`)
+		}
+		handleAlert("Selecione um movimento", "warning")
+	}
 
 	return (
 		<div className={style.divWrapper}>
-			{" "}
+			<CustomizedSnackbars />
 			<SelectPatient />
+			{patient && <SelectMovement setMovement={setMovement} />}
 			{patient && (
 				<div className={style.lastRow}>
 					{" "}
@@ -51,15 +67,10 @@ export default function HistorySelect() {
 			)}
 			{patient && (
 				<div className={style.submit}>
-					<Link
-						style={{ textDecoration: "none" }}
-						to={`/patientHistory/${patient.id}?startDate=${dates.initialDate}&endDate=${dates.endDate}`}
-					>
-						<DefaultButton>
-							<Person style={{ paddingRight: "10px" }} />
-							Selecionar
-						</DefaultButton>
-					</Link>
+					<DefaultButton handleClick={handleClick}>
+						<Person style={{ paddingRight: "10px" }} />
+						Selecionar
+					</DefaultButton>
 				</div>
 			)}
 		</div>

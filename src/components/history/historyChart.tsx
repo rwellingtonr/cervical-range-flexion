@@ -5,6 +5,8 @@ import AreaDisplayChart from "../charts/areaDisplayChart"
 import Box from "@mui/material/Box"
 import style from "./historyChart.module.scss"
 import DefaultButton from "../defaultButton.ts/defaultButton"
+import { Movement } from "../../interface/movement"
+import { movementOptions } from "../../utils/movements"
 
 type MeasureHistory = {
 	id: string
@@ -22,24 +24,32 @@ type Patient = {
 	birthday: Date
 	surgery_date: Date
 }
+
 export default function HistoryChart() {
 	const { id } = useParams<"id">()
 	const [searchParams] = useSearchParams()
 	const startDate = searchParams.get("startDate")
 	const endDate = searchParams.get("endDate")
+	const movement = searchParams.get("movement")
 	const [data, setData] = useState<MeasureHistory[]>([])
 
 	useEffect(() => {
 		retrieveData()
-			.then(content => setData(content))
+			.then(content => {
+				console.log(content)
+				setData(content)
+			})
 			.catch(e => console.error(e))
 	}, [id, startDate, endDate])
+
+	const setIsoStringDate = (dateString: string) => new Date(dateString).toISOString()
 
 	const retrieveData = async () => {
 		const res = await api.get<MeasureHistory[]>(`/history/${id}`, {
 			params: {
-				firstDate: !startDate ? new Date(startDate as string).toISOString() : "",
-				lastDate: !endDate ? new Date(endDate as string).toISOString() : "",
+				firstDate: !startDate ? setIsoStringDate(startDate as string) : "",
+				lastDate: !endDate ? setIsoStringDate(endDate as string) : "",
+				movement,
 			},
 		})
 
@@ -61,9 +71,13 @@ export default function HistoryChart() {
 			const firstScore = data[0].score
 			const lastScore = data.at(-1)?.score as number
 			const diff = (lastScore * 100) / firstScore
-			const real = diff - 100
+			const real = (diff - 100).toFixed(2)
 			return `${real}%`
 		}
+	}
+	const pickMovement = (selectedMovement: Movement) => {
+		const option = movementOptions.find(m => m.movement === selectedMovement)
+		return option?.label
 	}
 
 	return data.length ? (
@@ -72,6 +86,10 @@ export default function HistoryChart() {
 			<Box className={style.boxWrapper}>
 				<div className={style.displayInfo}>
 					<h2 className={style.tableHeader}>{data[0].patient.name}</h2>
+					<div className={style.tableWrapper}>
+						<h4>Movimento: </h4>
+						<p>{pickMovement(movement as Movement)}</p>
+					</div>
 					<div className={style.tableWrapper}>
 						<h4>Período: </h4>
 						<p>{period()}</p>

@@ -14,7 +14,7 @@ type ErrorType = {
 	message: string
 	severity: Severity
 }
-type Severity = "error" | "info" | "success" | "warning"
+export type Severity = "error" | "info" | "success" | "warning"
 
 const AlertContext = createContext({} as AlertContextValue)
 
@@ -28,7 +28,7 @@ export default function AlertProvider({ children }: AlertProvider) {
 	const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
 		if (reason === "clickaway") return
 
-		setError(initialState)
+		setError(prev => ({ message: "", severity: prev.severity }))
 	}
 	const handleAlert = (msg: string, type: Severity = "error") => {
 		setError({ message: msg, severity: type })

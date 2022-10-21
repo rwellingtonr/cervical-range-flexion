@@ -2,7 +2,8 @@ export const counter = (() => {
 	let i = 0
 
 	function reset() {
-		return (i = 0)
+		i = 0
+		return i
 	}
 
 	function increment() {
