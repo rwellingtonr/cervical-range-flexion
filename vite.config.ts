@@ -2,8 +2,8 @@
 /// <reference types="vite/client" />
 
 import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
 import ViteFonts from "vite-plugin-fonts"
+import reactRefresh from "@vitejs/plugin-react-refresh"
 import type { UserConfig as VitestUserConfigInterface } from "vitest/config"
 
 const vitestConfig: VitestUserConfigInterface = {
@@ -19,7 +19,7 @@ const vitestConfig: VitestUserConfigInterface = {
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
-		react(),
+		reactRefresh(),
 		ViteFonts({
 			google: {
 				families: ["Roboto"],
