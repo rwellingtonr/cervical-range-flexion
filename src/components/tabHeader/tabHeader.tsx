@@ -5,6 +5,7 @@ import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import { Person, Analytics, AdUnits } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
+import style from "./tabHearder.module.scss"
 
 enum TabsBar {
 	patientRegistration,
@@ -66,12 +67,9 @@ export default function FloatingActionButtonZoom() {
 		<Box
 			sx={{
 				width: 500,
-				"& .css-v526sl-MuiPaper-root-MuiAppBar-root": {
-					boxShadow: "none",
-				},
 			}}
 		>
-			<AppBar position="static" color="transparent">
+			<AppBar sx={{ boxShadow: "none" }} position="static" color="transparent">
 				<Tabs
 					value={value}
 					onChange={handleChange}
@@ -81,9 +79,6 @@ export default function FloatingActionButtonZoom() {
 					aria-label="action tabs example"
 					sx={{
 						boxShadow: "none",
-						"& .Mui-focusVisible": {
-							color: "#8fdac8",
-						},
 						"& .css-1ujykiq-MuiButtonBase-root-MuiTab-root.Mui-selected": {
 							background: "#8fdac833",
 							color: "#08542c",
@@ -93,9 +88,9 @@ export default function FloatingActionButtonZoom() {
 						},
 					}}
 				>
-					<Tab label={patient()} {...a11yProps(0)} />
-					<Tab label={measurement()} {...a11yProps(1)} />
-					<Tab label={history()} {...a11yProps(2)} />
+					<Tab className={style.tabWrappper} label={patient()} {...a11yProps(0)} />
+					<Tab className={style.tabWrappper} label={measurement()} {...a11yProps(1)} />
+					<Tab className={style.tabWrappper} label={history()} {...a11yProps(2)} />
 				</Tabs>
 			</AppBar>
 		</Box>
