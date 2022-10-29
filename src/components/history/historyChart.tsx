@@ -31,15 +31,14 @@ export default function HistoryChart() {
 	const startDate = searchParams.get("startDate")
 	const endDate = searchParams.get("endDate")
 	const movement = searchParams.get("movement")
+	const [isLoading, setIsLoading] = useState<boolean>(true)
 	const [data, setData] = useState<MeasureHistory[]>([])
 
 	useEffect(() => {
 		retrieveData()
-			.then(content => {
-				console.log(content)
-				setData(content)
-			})
+			.then(content => setData(content))
 			.catch(e => console.error(e))
+			.finally(() => setIsLoading(false))
 	}, [id, startDate, endDate])
 
 	const setIsoStringDate = (dateString: string) => new Date(dateString).toISOString()
@@ -80,42 +79,54 @@ export default function HistoryChart() {
 		return option?.label
 	}
 
-	return data.length ? (
-		<>
-			<AreaDisplayChart dataValues={data} xAxis={"measurement_date"} areaValue={"score"} />
-			<Box className={style.boxWrapper}>
-				<div className={style.displayInfo}>
-					<h2 className={style.tableHeader}>{data[0].patient.name}</h2>
-					<div className={style.tableWrapper}>
-						<h4>Movimento: </h4>
-						<p>{pickMovement(movement as Movement)}</p>
+	const returnChart = () => {
+		return (
+			<>
+				<AreaDisplayChart
+					dataValues={data}
+					xAxis={"measurement_date"}
+					areaValue={"score"}
+				/>
+				<Box className={style.boxWrapper}>
+					<div className={style.displayInfo}>
+						<h2 className={style.tableHeader}>{data[0].patient.name}</h2>
+						<div className={style.tableWrapper}>
+							<h4>Movimento: </h4>
+							<p>{pickMovement(movement as Movement)}</p>
+						</div>
+						<div className={style.tableWrapper}>
+							<h4>Período: </h4>
+							<p>{period()}</p>
+						</div>
+						<div className={style.tableWrapper}>
+							<h4>Diferença %:</h4>
+							<p>{improvement()}</p>
+						</div>
 					</div>
-					<div className={style.tableWrapper}>
-						<h4>Período: </h4>
-						<p>{period()}</p>
+					<div>
+						<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
+							<DefaultButton>Voltar</DefaultButton>
+						</Link>
 					</div>
-					<div className={style.tableWrapper}>
-						<h4>Diferença %:</h4>
-						<p>{improvement()}</p>
-					</div>
-				</div>
-				<div>
+				</Box>
+			</>
+		)
+	}
+
+	const missingData = () => {
+		return (
+			<Box component={"div"} className={style.notFoundWrapper}>
+				<h3 className={style.notFoundSubtitle}>
+					Nenhuma coleta foi encontrada para esse paciente
+				</h3>
+				<div className={style.actionButtonWrapper}>
 					<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
 						<DefaultButton>Voltar</DefaultButton>
 					</Link>
 				</div>
 			</Box>
-		</>
-	) : (
-		<Box component={"div"} className={style.notFoundWrapper}>
-			<h3 className={style.notFoundSubtitle}>
-				Nenhuma coleta foi encontrada para esse paciente
-			</h3>
-			<div className={style.actionButtonWrapper}>
-				<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
-					<DefaultButton>Voltar</DefaultButton>
-				</Link>
-			</div>
-		</Box>
-	)
+		)
+	}
+
+	return isLoading ? <></> : data.length ? returnChart() : missingData()
 }
