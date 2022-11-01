@@ -7,7 +7,7 @@
 		"test": "vitest",
 		"build": "rm -rf dist && tsc && vite build",
 		"start": "pm2 start ecosystem.config.js",
-		"preview": "vite preview",
+		"preview": "vite preview --port 3002",
 		"format": "prettier --write \"src/**/*.t*\" && yarn lint",
 		"lint": "eslint \"src/**/*.t*\" --fix"
 	},

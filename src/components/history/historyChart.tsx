@@ -44,10 +44,11 @@ export default function HistoryChart() {
 	const setIsoStringDate = (dateString: string) => new Date(dateString).toISOString()
 
 	const retrieveData = async () => {
+		console.log({ startDate, endDate })
 		const res = await api.get<MeasureHistory[]>(`/history/${id}`, {
 			params: {
-				firstDate: !startDate ? setIsoStringDate(startDate as string) : "",
-				lastDate: !endDate ? setIsoStringDate(endDate as string) : "",
+				firstDate: startDate ? setIsoStringDate(startDate as string) : "",
+				lastDate: endDate ? setIsoStringDate(endDate as string) : "",
 				movement,
 			},
 		})
