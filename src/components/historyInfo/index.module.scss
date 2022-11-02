@@ -32,19 +32,3 @@
 		}
 	}
 }
-.notFoundWrapper {
-	display: flex;
-	flex-direction: column;
-
-	height: 60%;
-	justify-content: space-evenly;
-
-	.notFoundSubtitle {
-		color: #ba6262;
-	}
-
-	.actionButtonWrapper {
-		display: inherit;
-		justify-content: center;
-	}
-}

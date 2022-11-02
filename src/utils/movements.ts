@@ -2,15 +2,15 @@ import type { MovementOptions } from "../interface/movement"
 
 export const movementOptions: MovementOptions[] = [
 	{
-		label: "Lateral esquerda",
+		label: "Rotação lateral esquerda",
 		movement: "lateral-left",
 	},
 	{
-		label: "Lateral Direita",
+		label: "Rotação lateral direita",
 		movement: "lateral-right",
 	},
 	{
-		label: "Flexão Frontal",
+		label: "Flexão frontal",
 		movement: "flexion",
 	},
 ]

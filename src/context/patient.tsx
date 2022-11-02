@@ -1,4 +1,5 @@
 import React, { createContext, ReactNode, useState, useContext, useCallback } from "react"
+import type { Patient } from "../interface/patient"
 import { api } from "../service/api"
 
 type PatientProvider = {
@@ -9,14 +10,6 @@ type PatientContextValue = {
 	patients: Patient[]
 	setPatient: (patient: Patient | null) => void
 	retrievePatients: () => Promise<void>
-}
-type Patient = {
-	id: string
-	name: string
-	cpf: string
-	gender: string
-	birthday: Date
-	surgery_date: Date
 }
 
 const PatientContext = createContext({} as PatientContextValue)

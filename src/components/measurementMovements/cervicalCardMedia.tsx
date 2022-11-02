@@ -4,8 +4,8 @@ import CardMedia from "@mui/material/CardMedia"
 import CardContent from "@mui/material/CardContent"
 
 // images
-import lateralLeft from "../../assets/Lateral esquerda.png"
-import lateralRight from "../../assets/Lateral direita.png"
+import lateralLeft from "../../assets/lateral esquerda.png"
+import lateralRight from "../../assets/lateral direita.png"
 import flexion from "../../assets/flexão.png"
 import { Movement } from "../../interface/movement"
 
@@ -16,13 +16,13 @@ type CervicalCardMediaProps = {
 const cervicalMovements = {
 	"lateral-right": {
 		src: lateralRight,
-		text: "O paciente deve realizado o movimento de flexão à lateral direita",
+		text: "O paciente deve realizado o movimento de flexão à Rotação lateral direita",
 	},
 	"lateral-left": {
 		src: lateralLeft,
-		text: "O paciente deve realizado o movimento de flexão à lateral esquerda",
+		text: "O paciente deve realizado o movimento de flexão à Rotação lateral esquerda",
 	},
-	flexion: { src: flexion, text: "O paciente deve realizado o movimento de flexão frontal" },
+	flexion: { src: flexion, text: "O paciente deve realizado o movimento de Flexão frontal" },
 }
 
 export default function CervicalCardMedia({ movement }: CervicalCardMediaProps) {
