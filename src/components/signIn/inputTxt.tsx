@@ -22,7 +22,6 @@ export default function InputTxt({ value, label, placeHolder, fillIn }: Props) {
 			{" "}
 			<Text
 				required
-				//	sx={{ m: 1, borderRadius: "10px", background: "#ffff" }}
 				id="outlined-required"
 				label={label}
 				placeholder={placeHolder}

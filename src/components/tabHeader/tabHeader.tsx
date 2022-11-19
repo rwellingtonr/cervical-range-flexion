@@ -73,8 +73,8 @@ export default function FloatingActionButtonZoom() {
 				<Tabs
 					value={value}
 					onChange={handleChange}
-					indicatorColor="primary"
-					textColor="secondary"
+					indicatorColor="secondary"
+					textColor="primary"
 					variant="fullWidth"
 					aria-label="Seleção de ações"
 					sx={{

@@ -48,13 +48,19 @@ export default function HistoryChart() {
 	}
 
 	const returnChart = () => {
+		const rowsFormatted = data.map(row => ({
+			...row,
+			measurement_date: new Date(row.measurement_date).toLocaleDateString(
+				"pt-BR"
+			) as unknown as Date,
+		}))
 		return (
 			<>
 				{showTable ? (
-					<HistoryTable rows={data} />
+					<HistoryTable rows={rowsFormatted} />
 				) : (
 					<AreaDisplayChart
-						dataValues={data}
+						dataValues={rowsFormatted}
 						xAxis={"measurement_date"}
 						areaValue={"score"}
 					/>

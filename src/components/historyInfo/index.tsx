@@ -59,12 +59,12 @@ export default function HistoryInfo({ data, movement, switchState, state }: Hist
 				</div>
 			</div>
 			<Stack spacing={2}>
-				<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
-					<DefaultButton>Voltar</DefaultButton>
-				</Link>
 				<DefaultButton handleClick={switchState}>
 					{state ? "Mostrar gráfico" : "Mostrar tabela"}
 				</DefaultButton>
+				<Link to={"/patientHistory"} style={{ textDecoration: "none" }}>
+					<DefaultButton>Voltar</DefaultButton>
+				</Link>
 			</Stack>
 		</Box>
 	)
