@@ -1,13 +1,22 @@
 .signWrapper {
-    display: flex;
-    height: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
 
-    .spine {
-        margin-right: 200px;
-    }
-    .form {
-    }
+	@media (min-width: 700px) {
+		flex-direction: row;
+	}
+
+	.form {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+	}
+
+	.image {
+		width: 43vw;
+		min-width: 550px;
+	}
 }

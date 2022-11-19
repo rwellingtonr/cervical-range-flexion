@@ -1,12 +1,12 @@
 import React, { FormEvent, useState, KeyboardEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import Box from "@mui/material/Box"
-import InputTxt from "./inputTxt"
-import style from "./sign.module.scss"
-import InputPassword from "./inputPassword"
-import SignInButton from "./buttonModal/signInButton"
 import { api } from "../../service/api"
 import { useAlert } from "../../context/alert"
+import Box from "@mui/material/Box"
+import Form from "./form"
+import InputTxt from "./inputTxt"
+import InputPassword from "./inputPassword"
+import SignInButton from "./buttonModal/signInButton"
 import CustomizedSnackbars from "../alert/alert"
 
 type SignUpProps = {
@@ -54,23 +54,9 @@ export default function SignUp({ validateCrefito }: SignUpProps) {
 	}
 
 	return (
-		<div className={style.formWrapper}>
+		<Box component={"div"} p={2}>
 			<CustomizedSnackbars />
-			<Box
-				component="form"
-				className={style.form}
-				sx={{
-					"& .MuiTextField-root": {
-						m: 0,
-						width: "350px",
-						maxWidth: "100%",
-					},
-				}}
-				noValidate
-				autoComplete="off"
-				onSubmit={handleSubmit}
-				onKeyPress={handleKeyPress}
-			>
+			<Form handleKeyPress={handleKeyPress} handleSubmit={handleSubmit}>
 				<div>
 					<h1>Registrar</h1>
 				</div>
@@ -88,13 +74,13 @@ export default function SignUp({ validateCrefito }: SignUpProps) {
 				/>
 
 				<InputPassword setPassword={setPassword} password={password} />
-				<div>
+				<Box component={"div"}>
 					<Link to="/sign/password" style={{ textDecoration: "none", color: "inherit" }}>
 						<p>Esqueci minha senha</p>
 					</Link>
-				</div>
+				</Box>
 				<SignInButton message={"Registrar"} />
-			</Box>
-		</div>
+			</Form>
+		</Box>
 	)
 }

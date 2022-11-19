@@ -69,23 +69,16 @@ export default function FloatingActionButtonZoom() {
 				width: 500,
 			}}
 		>
-			<AppBar sx={{ boxShadow: "none" }} position="static" color="transparent">
+			<AppBar sx={{ boxShadow: "none" }} position="relative" color="transparent">
 				<Tabs
 					value={value}
 					onChange={handleChange}
 					indicatorColor="primary"
-					textColor="primary"
+					textColor="secondary"
 					variant="fullWidth"
-					aria-label="action tabs example"
+					aria-label="Seleção de ações"
 					sx={{
 						boxShadow: "none",
-						"& .css-1ujykiq-MuiButtonBase-root-MuiTab-root.Mui-selected": {
-							background: "#8fdac833",
-							color: "#08542c",
-						},
-						"& .css-1aquho2-MuiTabs-indicator": {
-							background: "#8fdac8",
-						},
 					}}
 				>
 					<Tab className={style.tabWrappper} label={patient()} {...a11yProps(0)} />

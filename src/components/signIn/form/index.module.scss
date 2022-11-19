@@ -1,0 +1,21 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	margin: 50px;
+
+	justify-content: "space-evenly";
+	width: 450px;
+	height: 450px;
+	background: rgba(143, 218, 200, 0.6);
+	padding: 20px;
+
+	border-radius: 20px;
+	border: 1px solid #8fdac8;
+	box-shadow: 3px 2px 2px #8fdac8;
+
+	@media (max-width: 700px) {
+		width: auto;
+	}
+}

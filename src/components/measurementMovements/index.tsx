@@ -26,8 +26,8 @@ interface CervicalMovement {
 
 const cervicalMovement: CervicalMovement[] = [
 	{ label: "Flexão", movement: "flexion" },
-	{ label: "Flexão Rotação lateral esquerda", movement: "lateral-left" },
-	{ label: "Flexão Rotação lateral direita", movement: "lateral-right" },
+	{ label: "Rotação lateral à esquerda", movement: "lateral-left" },
+	{ label: "Rotação lateral à direita", movement: "lateral-right" },
 ]
 const flatProps = {
 	options: cervicalMovement.map(option => option.label),

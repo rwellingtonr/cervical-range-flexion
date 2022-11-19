@@ -1,5 +1,9 @@
-.tabWrappper {
+Tab.tabWrappper {
 	&:focus-visible {
 		background-color: #8fdac8;
+	}
+	&::selection {
+		background: "#8fdac833";
+		color: "#08542c";
 	}
 }
