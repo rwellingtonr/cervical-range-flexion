@@ -6,13 +6,17 @@ import "virtual:fonts.css"
 import AuthProvider from "./context/auth"
 import PatientProvider from "./context/patient"
 import AlertProvider from "./context/alert"
+import { ThemeProvider } from "@mui/material"
+import { theme } from "./styles/theme"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-	<AuthProvider>
-		<PatientProvider>
-			<AlertProvider>
-				<App />
-			</AlertProvider>
-		</PatientProvider>
-	</AuthProvider>
+	<ThemeProvider theme={theme}>
+		<AuthProvider>
+			<PatientProvider>
+				<AlertProvider>
+					<App />
+				</AlertProvider>
+			</PatientProvider>
+		</AuthProvider>
+	</ThemeProvider>
 )
